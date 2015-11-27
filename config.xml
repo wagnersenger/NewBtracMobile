@@ -7,13 +7,26 @@
     <author email="contato@btrac.com.br" href="http://www.btrac.com.br">
         Bsoft
     </author>
+	
+	<icon src="icons/icon.png" />
+	<platform name="android">
+          <icon src="icons/icon.png" density="ldpi" />
+    </platform>
+	
     <content src="index.html" />
-    <icon src="icons/icon.png" />
-
+    <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
-	
-	<preference name="permissions" value="none"/>
-	
-	<feature name="http://api.phonegap.com/1.0/network"/>
-    <feature name="http://api.phonegap.com/1.0/notification"/>
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
 </widget>
