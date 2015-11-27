@@ -1,23 +1,32 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.bsoft.BtracMobile" version="1.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.bsoft.BtracMobile" version="1.0.13" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>BTrac</name>
     <description>
         Sistema de rastreamento de veículos mobile.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
+    <author email="contato@btrac.com.br" href="http://www.btrac.com.br">
         Bsoft
     </author>
-    <content src="index.html" />
-
+	
 	<icon src="icons/icon.png" />
 	<platform name="android">
           <icon src="icons/icon.png" density="ldpi" />
     </platform>
 	
+    <content src="index.html" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
-	
-	<preference name="permissions" value="none"/>
-	
-	<feature name="http://api.phonegap.com/1.0/network"/>
-    <feature name="http://api.phonegap.com/1.0/notification"/>
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
 </widget>
