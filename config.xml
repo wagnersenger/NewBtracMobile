@@ -8,8 +8,7 @@
         Bsoft
     </author>
     <content src="index.html" />
-    <icon src="icon.png" />
-
+    <icon src="icons/icon.png" />
 
     <access origin="*" />
 	
