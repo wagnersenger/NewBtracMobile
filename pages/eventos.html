@@ -1,0 +1,158 @@
+<link href="assets/css/common.css" rel="stylesheet" />
+<link href="/assets/css/localizacao.css" rel="stylesheet" />
+<script src="assets/js/config.js"></script>
+<script src="assets/js/common.js"></script>
+
+<div id="internal-page">
+	<div class="conteudoInterno">
+		<h3 class="titulo"><img src="assets/img/right.png" height="16" >Selecione um ve&iacute;culo:</h3>
+		<label class="labelInput">Placa:&nbsp;</label><select id="veiculo_id" class="field" onchange="trocarVeiculo()"></select>
+	</div>
+	<input type="hidden" id="totalRegistros">
+	<div class="carregando" id="carregando"></div>
+	<div class="carregando_centro" id="carregando_centro">
+	    <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
+	    <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
+	</div>
+	<div class="mapa" id="mapa" >
+		<div id="positionMap"></div>
+		<table border="0" class="tblData" cellpadding="2" cellspacing="1">
+			<tr>
+				<td>Placa:</td>
+				<td id="td_placa" class="td_data"></td>
+			</tr>
+			<tr>
+				<td>Data:</td>
+				<td id="td_data_hora" class="td_data"></td>
+			</tr>
+			<tr>
+				<td>Evento:</td>
+				<td id="td_evento" class="td_data"></td>
+			</tr>
+			<tr>
+				<td>Cidade:</td>
+				<td id="td_cidade" class="td_data"></td>
+			</tr>
+			<tr>
+				<td>Próximo a:</td>
+				<td id="td_proximidade" class="td_data"></td>
+			</tr>
+			<tr>
+				<td>Velocidade:</td>
+				<td id="td_velocidade" class="td_data"></td>
+			</tr>
+			<tr>
+				<td>Situa&ccedil;&atilde;o:</td>
+				<td id="td_situacao" class="td_data"></td>
+			</tr>
+		</table>
+		
+		<button class="btnCinza" onClick="fecharPosicaoVeiculo()">FECHAR</button>
+
+	</div>
+</div>
+
+<script>
+ 	$(document).ready( function() {
+        $('#lblTituloPagina').html('Eventos de Ve&iacute;culos');
+
+        abrirCarregando('Carregando Veículos');
+		getVeiculosOptions();
+        //getPosicoes(1);
+    });
+	
+	if(commomInterval){
+ 		clearInterval(commomInterval);
+	 }
+
+    function trocarVeiculo(){
+    	$('.dv_listaVeiculos').remove();
+    		
+    	if( $('#veiculo_id').val() != '' )
+    		getEventos(0);
+    }
+
+    function getVeiculosOptions(){
+    	$.post(_HOST+'/admin/veiculos/getVeiculosOptions.php'
+ 			  ,{  LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+ 			  	, EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+				, VERSION: _CURRENT_VERSION }
+ 			  , function(data){
+	 			  	$('#veiculo_id').html(data);
+	 			  	fecharCarregando();
+ 			  }
+    		);
+    }
+
+    var consultando = 0;
+    function getEventos(p_inicio, p_continuacao){    	
+    	if(consultando == 0){
+    		consultando = 1;
+
+    		if(p_continuacao != 1)
+    			abrirCarregando('Buscando Eventos');
+
+    		if(p_inicio > 0 )
+    			$('#internal-page').append('<div class="carregandoScroll"><img src="assets/img/loading.gif" height="16px">&nbsp;Carregando...</div>');
+
+	    	$.post( _HOST+'/admin/veiculos/getEventos.php'
+				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			  	    , LOGIN:localStorage.getItem('BTRAC_LOGIN')
+				  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+				  	, VEICULO_ID: $('#veiculo_id').val()
+					, VERSION: _CURRENT_VERSION
+				  	, INICIO: p_inicio
+				   	, LIMIT: 30
+				  	}
+				  , function(data){
+				  		$('.carregandoScroll').remove();
+				  		$('#internal-page').append(data);
+	                    fecharCarregando();
+
+	                    consultando = 0;
+	                    getNextLocation();
+				  });
+
+    	}
+    }
+
+    function abrirMapa(p_veiculo_id, p_icon, p_latitude, p_longitude, p_placa, p_data, p_cidade, p_proximidade, p_velocidade, p_situacao, p_evento, p_obj_div){
+    	document.getElementById('carregando').style.display = 'block';
+    	document.getElementById('mapa').style.display = 'block';
+		
+    	gMaps = new GoogleMaps();
+ 		gMaps.htmlId = 'positionMap';
+ 		gMaps.zoom = 15;
+ 		gMaps.initialize();
+ 		gMaps.markerIcon = p_icon;
+ 		gMaps.addMarker(p_latitude, p_longitude);
+ 		gMaps.setCenter(p_latitude, p_longitude);
+
+ 		$('#mapa').css('top', document.getElementById('scroll').scrollTop );
+
+ 		$('.carregando').css('height', $('#internal-page').height() );
+
+		
+ 		document.getElementById('td_placa').innerHTML = p_placa;
+ 		document.getElementById('td_data_hora').innerHTML = p_data;
+ 		document.getElementById('td_evento').innerHTML = p_evento;
+ 		document.getElementById('td_cidade').innerHTML = p_cidade;
+ 		document.getElementById('td_proximidade').innerHTML = p_proximidade;
+ 		document.getElementById('td_velocidade').innerHTML = p_velocidade+' km/h';
+ 		document.getElementById('td_situacao').innerHTML = p_situacao;
+ 		
+ 		$('#scroll').css('overflow','hidden');
+    	$('#mapa').offset({ top: 50 });
+    	$('#positionMap').offset({ top: $('#mapa').offset().top });
+ 		
+ 		//alert(document.getElementById('mapa').style.top);
+    }
+
+    function fecharPosicaoVeiculo(){
+    	document.getElementById('carregando').style.display = 'none';
+    	document.getElementById('mapa').style.display = 'none';
+
+    	$('#scroll').css('overflow','auto');
+    }
+</script>

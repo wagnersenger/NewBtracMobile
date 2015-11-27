@@ -1,0 +1,227 @@
+<link href="assets/css/common.css" rel="stylesheet" />
+<link href="assets/css/localizacao.css" rel="stylesheet" />
+<script src="assets/js/config.js"></script>
+<script src="assets/js/common.js"></script>
+
+<div id="internal-page">
+	<div id="map"></div>
+    <div class="carregando" id="carregando"  style="border:1px solid"></div>
+    <div class="carregando_centro" id="carregando_centro" >
+        <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
+        <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
+    </div>
+</div>
+
+<script>
+ 	v_markers = Array();
+	var currentIndexPosition = 0;
+	var countLocations = 0;
+	var alteradoCentro = false;
+	var currentMarkerLocation = 0;
+	var infoWindow;
+	var placaAnimacao = "";
+	var animacao;
+
+ 	$(document).ready( function() {
+		
+        $('#lblTituloPagina').html('Localiza&ccedil;&atilde;o de Ve&iacute;culos');
+        
+        consultarPosicoes();
+			  
+		gMaps = new GoogleMaps();
+ 		gMaps.htmlId = 'map';
+ 		gMaps.initialize();
+    });
+	
+	function consultarPosicoes(){
+		abrirCarregando('Carregando Veículos');
+
+		try{
+			$.post( _HOST+'/admin/veiculos/getVeiculos.php'
+				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+				  	, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+				  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+					, VERSION: _CURRENT_VERSION
+					}
+				  , function(data){
+					  	$('.dv_listaVeiculos').remove();
+				  		$('#internal-page').append(data);
+	        
+	                    fecharCarregando();
+	                    currentMarkerLocation=0;
+	                    getNextLocation();
+						
+						commomInterval = setTimeout(consultarPosicoes, 30000);
+				  });
+		}catch(e){}
+
+	}
+
+    
+
+    function getNextLocation(){
+        if(currentMarkerLocation < v_markers.length){
+            if( v_markers[currentMarkerLocation].localizacao == ''){
+                displayLocation(v_markers[currentMarkerLocation].latitude,v_markers[currentMarkerLocation].longitude, v_markers[currentMarkerLocation].veiculo_id);
+            }
+            currentMarkerLocation++;
+        }
+    }
+
+    var withKey = false;
+	function displayLocation(latitude,longitude, posicao_id, veiculo_id){
+		r = '';
+		
+		if(withKey)
+			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+_GMAPS_ADDRESS_KEY;
+		else
+			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude;
+		
+		$.ajax({
+		  url: url,
+		  dataType: 'json',
+		  async: true,
+		  success: function(data) {
+				
+					if(data.status == 'OK' ){
+						var address = data.results[0].address_components;
+						
+						for (var j=0; j<address.length; j++){
+							if (address[j].types[0]=='administrative_area_level_2'){
+								var cidade = address[j].long_name;
+								break;
+							}
+						}
+						if(!cidade){
+							for (var j=0; j<address.length; j++){
+								if (address[j].types[0]=='locality'){
+									var cidade = address[j].long_name;
+									break;
+								}
+							}
+						}
+						$('#address'+posicao_id).html(data.results[0].formatted_address);
+						$.post( _HOST+"/admin/veiculos/control.php"
+							  , { EXECUCAO:5
+							    , VEICULO_ID: veiculo_id
+								, ENDERECO: data.results[0].formatted_address
+								, CITY: cidade
+								, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  					, SENHA:localStorage.getItem('BTRAC_SENHA')
+								, VERSION: _CURRENT_VERSION
+							    }
+							   , function(r) {});
+						
+						waitNextLocation(200);
+						
+					}else{
+						if(data.status == 'OVER_QUERY_LIMIT'){
+							currentLocation--;
+							withKey = true;
+						}
+						waitNextLocation(200);
+					}
+				
+		  }
+		  
+		});
+	};
+	
+	
+	function getLocations(){
+		i=0;
+		$( ".veiculo_coordenadas" ).each(function() {
+			i++;
+			if(i > countLocations){
+				countLocations++;
+				
+				displayLocation($( this ).attr('lat'), $( this ).attr('long'), $( this ).attr('posicao_id'), $( this ).attr('veiculo_id'));
+				return false;
+			}
+		});
+		gMaps.fitBounds();
+	}
+	
+	
+	
+	function waitNextLocation(v_time){
+		setTimeout(getLocations, v_time);
+	}
+	
+	$(document).ready(function(){
+		getLocations();
+	});
+	
+	
+	function manipMarcadorVeiculo(p_placa, p_latitude, p_longitude, p_icone){
+		encontrado = false;
+		for(i=0; i<v_markers.length; i++){
+			if(v_markers[i].placa == p_placa){
+				encontrado = true;	
+				
+				_marker = v_markers[i].marker;
+				
+				_marker.setAnimation(null);
+
+				v_markers[i].marker.icon = p_icone;
+
+				v_markers[i].latitude = p_latitude;
+				v_markers[i].longitude = p_longitude;
+				gMaps.changePositionMarkerTitle(p_placa, p_latitude, p_longitude);
+				i = v_markers.length;
+			}
+		}
+		
+		if(!encontrado){
+			gMaps.markerIcon = p_icone;
+
+			v_marker = gMaps.addMarker(p_latitude,p_longitude,p_placa);
+
+			v_markers.push({marker:v_marker, placa:p_placa,  latitude:p_latitude, longitude:p_longitude, icon:p_icone });			
+		}
+		
+		try{
+			clearInterval(animacao);
+		}catch(e){}
+		
+		animacao = setTimeout(recolocarAnimacao,1000);
+	}
+	
+	function recolocarAnimacao(){
+		for(i=0; i<v_markers.length; i++){
+			if(v_markers[i].placa == placaAnimacao){
+				_marker = v_markers[i].marker;
+				_marker.setAnimation(google.maps.Animation.BOUNCE);
+				i = v_markers.length;
+			}
+		}
+	}
+	
+	
+	
+	function centerMarker(p_placa){
+		for(i=0; i<v_markers.length; i++){
+			
+			if(v_markers[i].placa == p_placa){
+				try{
+					infoWindow.close();
+				}catch(e){}
+				
+				infoWindow = new google.maps.InfoWindow({
+					content: p_placa
+				});
+				infoWindow.open(gMaps.map, v_markers[i].marker);
+				
+				placaAnimacao = p_placa;
+				v_markers[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+				gMaps.setZoom(16);
+				gMaps.setCenter(v_markers[i].latitude, v_markers[i].longitude);
+				i = v_markers.length;
+
+				alteradoCentro = true;
+			}else{
+				v_markers[i].marker.setAnimation(null);
+			}
+		}
+	}
+ </script>

@@ -1,0 +1,370 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 07/11/2014, 16:22:28
+    Author     : Wagner
+*/
+
+*{
+    font-family: Arial;
+}
+
+.content{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.carregando{
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+    z-index: 9998;
+    display: none;
+}
+
+.carregando_centro{
+    position: absolute;
+    top: 40%;
+    width: 40%;    
+    height: 90px;
+    margin-left:30%;
+    background-color: #000;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    z-index: 9999;
+    border-radius: 10px;
+    color:#FFF;
+    display: none;
+}
+
+#lblTituloPagina{
+    color:#fff !important;
+    font-size:20px;
+    line-height: 65px; 
+}
+
+.footer{
+    width:100%;
+    height:35px;
+    line-height: 45px;
+    font-family: Arial;
+    font-size: 12px;
+    /*margin-left:0.75%;    */
+    text-align: center;
+    background: url('../img/background/bg_topo.jpg') center;
+        background-repeat: repeat-x;
+    position: fixed;
+    bottom:0px;
+/*    border-radius:5px;
+*/    z-index: 9998;
+}
+
+.footer > img{
+    margin-top: 8px;
+}
+
+.lb_error{
+    color:red;
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    border-top:1px solid #FFE0D7;
+    border-bottom:1px solid #FFE0D7;
+    height: 35px;
+    line-height: 35px;    
+    text-transform: uppercase;
+    display: none;
+}
+
+.topcoat-list__item{
+    padding: 15px 0px 15px 10px;
+}
+
+#menu ul li{
+    color:#226599 !important;
+}
+
+.iconMenu{
+    width:25px; 
+    text-align:center; 
+    float:left;
+    margin-top: -4px;
+}
+
+#map{
+    width: 100%;
+    height: 300px;
+    background-color: gray;
+    border: 1px solid #f9f9f9;
+    border-radius: 0px !important;
+    margin-top:1px;
+}
+
+.listaVeiculos > li{
+    height: 60px;
+    width: 100px;
+    background-image: url('../img/bg_veiculos.jpg');
+    background-repeat: repeat-x;
+}
+
+.dv_listaVeiculos{
+    height: 60px;
+    width: 100%;
+    background-image: url('../img/background/bg_veiculos.jpg');
+    background-repeat: repeat-x;
+    margin-top:1px;
+    margin-left:0px;
+    border-radius: 0px !important;
+    
+}
+
+.veiculoMundo{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 20px;
+    margin-top: 16px;
+    background-image: url('../img/mundo.png');
+    background-repeat: no-repeat;
+    
+}
+
+.veiculoIconeBus, .veiculoIconeTruck, .veiculoIconeBoat, .veiculoIconeCar{
+	max-height:38px;
+	max-width:50px;
+	padding:10px 0px;
+	float: right;
+}
+
+.veiculoIconeBus{
+    margin:11px 8px;
+}
+
+.veiculoIconeTruck{
+    margin:7px 8px;	
+}
+.veiculoIconeCar{
+    margin:8px 8px;
+	max-height:38px;
+}
+
+.veiculoIconeBoat{
+    margin:13px 8px;
+}
+
+.lbModelo{
+    color:#363636;
+    font-size: 100%;
+    font-weight: bold;
+    display:block;
+    padding-top: 8px;
+
+}
+
+.lbCidade{
+    width: 85%;
+    color:#236a9e;
+    font-size: 75%;
+    font-weight: bold;
+    display: block;
+    margin-top:3px;
+}
+
+#scroll{
+    padding: 0px !important;
+}
+
+.overthrow-enabled #scroll{
+    background: #c9c9c9 !important;
+}
+
+.conteudoInterno{
+    width: 100%;
+    background: #F2F2F2;
+    padding-bottom: 15px;
+}
+
+.titulo{
+    color: #333;
+    width: 90%;
+    
+    /*background: url('/assets/img/right.png');*/
+    background-position: left;
+    background-repeat: no-repeat;;
+    padding-left: 20px;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 15px;
+}
+
+#lblTituloPagina{
+    color:#fff !important;
+    font-size:20px;
+    line-height: 65px; 
+}
+
+.labelInput{
+    margin-left: 30px;
+    color:#333;
+    font-size: 14px;
+}
+
+select #veiculo_id{
+    width: 80%;
+}
+
+.field{
+    width: 70%;
+    height: 25px;
+}
+
+.dataHora{
+    float: left;
+/*    margin:15px 15px 15px 15px;
+*/  margin: 7px;
+    margin-bottom: 0px;
+
+}
+
+.data, .hora{
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    color: #00A400;
+    text-align: center;
+}
+
+.data{
+    padding-bottom: 3px;
+}
+
+.dataPosicao{
+	color: #093;
+    float: left;
+    font-size: 12px;
+    font-weight: bold;
+    height: auto;
+    padding: 18px 0 0 8px;
+    width: 40px;
+}
+
+.pt2{
+    padding-top: 2px;
+}
+
+.pt6{
+    padding-top: 6px;
+}
+
+.h45{
+    height: 45px;
+}
+
+.mt8{
+    margin-top:8px;
+}
+
+.mt15{
+    margin-top: 15px !important;
+}
+
+.fs90{
+    font-size: 90%;
+}
+
+.mapa{
+    position: absolute;
+    margin-top: 100px;
+    width: 90%;
+    min-height: 350px;
+    margin-left:5%;
+    background-color: #fff;
+    z-index: 9999;
+    border-radius: 10px;
+    color:#FFF;
+    display:none;
+}
+
+#positionMap{
+    width: auto;
+    height: 200px;
+    background-color: #999;
+    z-index: 10000;
+    margin:10px;
+    border-radius: 5px;
+}
+
+.tblData{
+    color:#23669B;
+    font-size: 12px;
+    margin:10px;
+    line-height: 18px;
+}
+
+.tblData tr > td:first-child{
+    color: #333 !important;
+    
+    margin-left: 12px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.tblData tr:nth-child(2){
+    padding-left: 5px;
+}
+
+.btnCinza{
+    border:none;
+    background-color: #888;    
+    margin-bottom: 10px;
+    width: 100%;
+    height: 30px;
+    color: #FFF;
+}
+
+.td_data{
+    padding-left: 5px;
+}
+
+span{
+    color:#23669B;
+    display: block;
+}
+
+.carregandoScroll{ 
+    height: 60px;
+    width: 100%;
+    background-image: url('../img/background/bg_veiculos.jpg');
+    background-repeat: repeat-x;
+    margin-top:1px;
+    margin-left:0px;
+    border-radius: 0px !important;
+    text-align: center;
+    line-height: 60px;
+    font-size: 13px;
+    font-weight: bold;
+    color:#333;
+}
+
+.m10{
+    margin: 10px;
+}
+
+@media (max-width: 350px) {
+	#lblTituloPagina{
+		font-size:17px;
+	}
+	#menu-button{
+		background-size:30px;
+	}
+}

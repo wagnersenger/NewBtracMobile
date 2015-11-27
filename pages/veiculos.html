@@ -1,0 +1,31 @@
+<link href="assets/css/common.css" rel="stylesheet" />
+<link href="/assets/css/localizacao.css" rel="stylesheet" />
+<script src="assets/js/config.js"></script>
+<script src="assets/js/common.js"></script>
+
+<div id="internal-page"></div>
+
+<script>
+	if(commomInterval)
+		clearInterval(commomInterval);
+	
+ 	$(document).ready( function() {
+        $('#lblTituloPagina').html('Lista de Ve&iacute;culos');
+
+        abrirCarregando('Carregando Veículos');
+
+		$.post( _HOST+'/admin/veiculos/getListaVeiculos.php'
+			  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			  	, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+				, VERSION: _CURRENT_VERSION
+				}
+			  , function(data){
+			  		$('#internal-page').append(data);
+                    fecharCarregando();
+                    
+                    getNextLocation();
+			  });
+
+    });
+</script>

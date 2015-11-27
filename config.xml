@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.bsoft.BtracMobile" version="1.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>BTrac</name>
+    <description>
+        Sistema de rastreamento de veículos mobile.
+    </description>
+    <author email="dev@cordova.apache.org" href="http://cordova.io">
+        Bsoft
+    </author>
+    <content src="index.html" />
+
+	<icon src="www/icons/icon.png" />
+	<platform name="android">
+          <icon src="www/icons/icon.png" density="ldpi" />
+    </platform>
+	
+    <access origin="*" />
+	
+	<preference name="permissions" value="none"/>
+	
+	<feature name="http://api.phonegap.com/1.0/network"/>
+    <feature name="http://api.phonegap.com/1.0/notification"/>
+</widget>

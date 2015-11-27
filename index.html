@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link href="assets/css/login.css" rel="stylesheet" />
+        <link href="assets/css/common.css" rel="stylesheet" />
+        <title>Btrac, rastreamento de ve&iacute;culos</title>
+    </head>
+    <body >
+        <div class="login">
+            <form name="frmLogin" id="frmLogin">
+                <input type="text" name="LOGIN" id="LOGIN" placeholder="Usu&aacute;rio da sua conta Btrac">
+                <input type="password" name="SENHA" id="SENHA" placeholder="Senha da sua conta Btrac">
+                <button id="btnConectar" type="button">Conectar ao Btrac</button>
+            </form>
+            <label class="lb_error">Erro não especificado</label>
+        </div>
+        <div class="footer_login">Copyright 2014 BSoft, todos os direitos reservados</div>
+        
+        <div class="carregando" id="carregando"></div>
+        <div class="carregando_centro" id="carregando_centro">
+            <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
+            <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
+        </div>
+
+        <script src="assets/js/config.js"></script>        
+        <script src="assets/js/vendors/zepto.min.js"></script>
+        <script src="assets/js/login.js"></script>
+        <script src="assets/js/common.js"></script>
+        <script type="text/javascript">
+            //app.initialize();
+
+
+            function proxima(){
+                window.location = 'home.html';
+            }
+
+            if( localStorage.getItem('BTRAC_LOGIN') != null ){
+                proxima();
+            }
+
+        </script>
+    </body>
+</html>

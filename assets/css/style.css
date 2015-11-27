@@ -1,0 +1,122 @@
+/* FASTGAP https://github.com/GustavoCostaW/FastGap */
+/* CUSTOMIZE YOUR APP */
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+html, body{
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+#menu ul li {
+  color: #A02615;
+  font-weight: bold; }
+
+#scroll {
+  padding: 10px;
+  box-sizing: border-box; }
+
+#content {
+  background: white;
+  color: #A02615; }
+
+#content a {
+  font-weight: bold;
+  color: #A02615;
+  font-size: 13px; }
+
+.title-page {
+  font-size: 30px;
+  color: #A02615;
+  font-weight: bold;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc; }
+
+.page-item {
+  margin-top: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 15px; }
+
+.page-item img {
+  float: right;
+  width: 80px;
+  height: 80px;
+  border-radius: 60px;
+  margin-left: 10px;
+  margin-top: 10px; }
+
+#internal-page {
+  width: 100%; 
+  height: 100%;
+}
+
+#internal-page h1 {
+  font: 5px "Source Sans", helvetica, arial, sans-serif;
+  width: 100%;
+  font-size: 25px;
+  text-align: center; }
+
+.page-item p {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 16px; }
+
+.developers {
+  margin-top: 10px;
+  text-align: center; }
+
+.developers img {
+  border-radius: 60px; }
+
+.developers div {
+  display: inline-block;
+  padding: 5px; }
+
+/*-----------------------*/
+
+html,
+body {
+  background: white;
+}
+body {
+  background: #333;
+}
+/* APP LOGO IMG */
+
+header#header-app {
+  height: 60px;
+  text-align: center;
+/*  background: #ab0207 url('/assets/img/fastgap_logo.jpg') no-repeat center;
+*/  background: url('../img/background/bg_topo.jpg') center;
+        background-repeat: repeat-x;
+}
+/* BOX LOAD PAGES */
+
+/* SCROLL */
+.overthrow-enabled #scroll {
+  background: #333;
+}
+/* MENU BUTTON */
+
+#menu-button {
+  top: 5px;
+  left: 3px;
+  width: 80px;
+  color: white;
+  height: 50px;
+  text-decoration: none;
+  text-align: center;
+  line-height: 37px;
+  background: #345365;
+  background: url('../img/back.png') no-repeat center;
+}
+/* MENU APP */
+
+menu {
+  width: 180px;
+  height: 100%;
+  border-right: 1px solid #ccc;
+}

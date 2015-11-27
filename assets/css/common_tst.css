@@ -1,0 +1,177 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 07/11/2014, 16:22:28
+    Author     : Wagner
+*/
+
+*{
+
+    font-family: Arial;
+}
+
+.content{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.carregando{
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+    z-index: 9998;
+    display: none;
+}
+
+.carregando_centro{
+    position: absolute;
+    top: 40%;
+    width: 40%;    
+    height: 90px;
+    margin-left:30%;
+    background-color: #000;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    z-index: 9999;
+    border-radius: 10px;
+    color:#FFF;
+    display: none;
+}
+
+#lblTituloPagina{
+    color:#fff !important;
+    font-size:20px;
+    line-height: 65px; 
+}
+
+.footer{
+    width:100%;
+    height:35px;
+    line-height: 45px;
+    font-family: Arial;
+    font-size: 12px;
+    /*margin-left:0.75%;    */
+    text-align: center;
+    background: url('../img/background/bg_topo.jpg') center;
+        background-repeat: repeat-x;
+    position: fixed;
+    bottom:0px;
+/*    border-radius:5px;
+*/    z-index: 9998;
+}
+
+.footer > img{
+    margin-top: 8px;
+}
+
+.lb_error{
+    color:red;
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    border-top:1px solid #FFE0D7;
+    border-bottom:1px solid #FFE0D7;
+    height: 35px;
+    line-height: 35px;    
+    text-transform: uppercase;
+    display: none;
+}
+
+.topcoat-list__item{
+    padding: 15px 0px 15px 10px;
+}
+
+#menu ul li{
+    color:#226599 !important;
+}
+
+.iconMenu{
+    width:25px; 
+    text-align:center; 
+    float:left;
+    margin-top: -4px;
+}
+
+#map{
+    width: 100%;    
+    height: 300px;
+    background-color: gray;
+    border: 1px solid #f9f9f9;
+    border-radius: 5px !important;
+    margin-top:3px;
+}
+
+.listaVeiculos > li{
+    height: 60px;
+    width: 100px;
+    background-image: url('/assets/img/bg_veiculos.jpg');
+    background-repeat: repeat-x;
+}
+
+.dv_listaVeiculos{
+    height: 60px;
+    width: 100%;
+    background-image: url('/assets/img/background/bg_veiculos.jpg');
+    background-repeat: repeat-x;
+    margin-top:5px;
+    margin-left:1px;
+    border-radius:5px;
+}
+
+.veiculoMundo{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 20px;
+    margin-top: 16px;
+    background-image: url('/assets/img/mundo.png');
+    background-repeat: no-repeat;
+    
+}
+
+.veiculoIconeBus{
+    float: left;
+    margin:15px 8px;
+}
+
+.veiculoIconeTruck{
+    float: left;
+    margin:10px 8px;
+}
+.veiculoIconeCar{
+    float: left;
+    margin:17px 8px;
+}
+
+.veiculoIconeBoat{
+    float: left;
+    margin:18px 8px;
+}
+
+.lbModelo{
+    color:#363636;
+    font-size: 100%;
+    font-weight: bold;
+    display:block;
+    padding-top: 8px;
+
+}
+
+.lbCidade{
+    width: 85%;
+    color:#236a9e;
+    font-size: 75%;
+    font-weight: bold;
+    display: block;
+    margin-top:3px;
+}
