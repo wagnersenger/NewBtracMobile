@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8" />
+
+	<!-- Styles -->
+	<!-- Topcoat mobile -->
+	<link rel="stylesheet" href="assets/css/topcoat-mobile-light.min.css" />
+	<!-- Snap -->
+	<link rel="stylesheet" href="assets/css/snap.css" />
+	<!-- Fastgap base style -->
+	<link rel="stylesheet" href="assets/css/fastgap.min.css" />
+	<!-- Your custom style -->
+	<link rel="stylesheet" href="assets/css/style.css" />
+	<link rel="stylesheet" href="assets/css/common.css" />
+
+	<!-- Javascripts -->
+	<!--<script src="../dist/js/fastgap.controllers.js"></script>-->
+	<!--<script src="../dist/js/fastgap.libs.js"></script>-->
+	<!--<script src="../dist/js/fastgap.core.js"></script>-->
+	<script src="assets/js/fastgap.js"></script>
+	<script src="assets/js/vendors/zepto.min.js"></script>
+	<script src="assets/js/maps_api.js"></script>
+	<script src="assets/js/maps.js"></script>
+	<script src="assets/js/config.js"></script>
+	<!--<script src="assets/js/vendors/jquery.js" type="text/javascript"></script>-->
+	<script src="assets/js/common.js"></script>
+	<!-- VIEWPORT -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>Btrac, rastreamento de ve&iacute;culost</title>
+</head>
+
+<body>
+	<!-- BOX CONTENT LOAD PAGES WITH AJAX-->
+	<div id="page">
+		<div class="snap-drawers">
+			<!-- MENU -->
+			<menu id="menu">
+				<div class="topcoat-list" id="menu-content">
+					<ul class="topcoat-list__container">
+						<li class="topcoat-list__item botoes-app" data-url="home.html" data-controler='HomeController' >
+							<div class="iconMenu"><img src="assets/img/marker9.png" style="vertical-align:-5px"  ></div>&nbsp;Localiza&ccedil;&atilde;o
+						</li>
+						<li class="topcoat-list__item botoes-app" data-url="veiculos.html" data-controler='VeiculosController'>
+							<div class="iconMenu"><img src="assets/img/truck3.png" style="vertical-align:-4px"  ></div>&nbsp;Ve&iacute;culos
+						</li>
+						<li class="topcoat-list__item botoes-app" data-url="posicoes.html" data-controler='PosicoesController' align="absmiddle">
+							<div class="iconMenu"><img src="assets/img/lista1.png" style="vertical-align:-4px"  ></div>&nbsp;Posi&ccedil;&otilde;es
+						</li>
+						<li class="topcoat-list__item botoes-app" data-url="eventos.html" data-controler='EventosController'>
+							<div class="iconMenu"><img src="assets/img/atention.png" style="vertical-align:-4px"  ></div>&nbsp;Eventos
+						</li>
+						<li class="topcoat-list__item botoes-app" data-url="logoff.html" data-controler='LogoffController'>
+							<div class="iconMenu"><img src="assets/img/sair.png" style="vertical-align:-4px"  ></div>&nbsp;Sair
+						</li>
+					</ul>
+				</div>
+			</menu>
+		</div>
+
+		<!-- DYNAMIC CONTENT -->
+		<div id="content" class="snap-content">
+			<!-- HEADER -->
+			<header id="header-app">
+				<!-- APP IMG LOAD WITH CSS -->
+				<div id="menu-button"></div>
+				<label id="lblTituloPagina"></label>
+			</header>
+			<!-- load content here -->
+			<div id="scroll" class="overthrow"></div>
+		</div>
+		<div class="carregando" id="carregando"></div>
+        <div class="carregando_centro" id="carregando_centro">
+            <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px" ></div>
+            <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
+        </div>
+	</div>
+</body>
+
+</html>
