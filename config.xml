@@ -8,9 +8,9 @@
         Bsoft
     </author>
 	
-	<icon src="icons/icon.png" />
+	<icon src="www/icons/icon.png" />
 	<platform name="android">
-          <icon src="icons/icon.png" density="ldpi" />
+          <icon src="www/icons/icon.png" density="ldpi" />
     </platform>
 	
     <content src="index.html" />
