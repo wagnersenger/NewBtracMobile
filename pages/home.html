@@ -21,6 +21,8 @@
 	var infoWindow;
 	var placaAnimacao = "";
 	var animacao;
+	var loaded = false;
+	var center = true;
 
  	$(document).ready( function() {
 		
@@ -31,11 +33,22 @@
 		gMaps = new GoogleMaps();
  		gMaps.htmlId = 'map';
  		gMaps.initialize();
+		gMaps.map.addListener('zoom_changed', function(){
+			if(loaded)
+				center = false;
+		});
+		gMaps.map.addListener('idle', function(){
+			loaded = true;
+		});
+		gMaps.map.addListener('drag', function(){
+			if(loaded)
+				center = false;
+		});
     });
 	
 	function consultarPosicoes(){
 		abrirCarregando('Carregando Veículos');
-
+		loaded = false;
 		try{
 			$.post( _HOST+'/admin/veiculos/getVeiculos.php'
 				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
@@ -139,7 +152,8 @@
 				return false;
 			}
 		});
-		gMaps.fitBounds();
+		if(center)
+			gMaps.fitBounds();
 	}
 	
 	
@@ -147,10 +161,6 @@
 	function waitNextLocation(v_time){
 		setTimeout(getLocations, v_time);
 	}
-	
-	$(document).ready(function(){
-		getLocations();
-	});
 	
 	
 	function manipMarcadorVeiculo(p_placa, p_latitude, p_longitude, p_icone){

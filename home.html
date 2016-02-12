@@ -31,7 +31,7 @@
 	<title>Btrac, rastreamento de ve&iacute;culost</title>
 </head>
 
-<body>
+<body onresize="reajustarTela()"> 
 	<!-- BOX CONTENT LOAD PAGES WITH AJAX-->
 	<div id="page">
 		<div class="snap-drawers">
@@ -76,6 +76,12 @@
             <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
         </div>
 	</div>
+	<script>
+		function reajustarTela(){			
+			var windowHeight = window.innerHeight;
+			$('#scroll').css('height',windowHeight);
+		}
+	</script>
 </body>
 
 </html>
