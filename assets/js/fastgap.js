@@ -3565,7 +3565,15 @@ if (typeof define !== 'undefined' && define.amd) {
 		//prevent bug call transitionend
 		setTimeout(function () {
 			Transition.control = true;
-			Navigator.loadPage('home.html','HomeController');
+			$.post(_HOST + 'admin/sistema/getIndex.php'
+				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+					, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+					, SENHA:localStorage.getItem('BTRAC_SENHA')
+					, VERSION: _CURRENT_VERSION
+				    }
+				  , function(result){
+					  Navigator.loadPage($.trim(result),'HomeController');
+					});
 		}, 10);
 		//});
 	};
