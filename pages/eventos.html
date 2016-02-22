@@ -4,10 +4,8 @@
 <script src="assets/js/common.js"></script>
 
 <div id="internal-page">
-	<div class="conteudoInterno">
-		<h3 class="titulo"><img src="assets/img/right.png" height="16" >Selecione um ve&iacute;culo:</h3>
-		<label class="labelInput">Placa:&nbsp;</label><select id="veiculo_id" class="field" onchange="trocarVeiculo()"></select>
-	</div>
+	<div id="veiculos_evento"></div>
+    <div id="resultados"></div>
 	<input type="hidden" id="totalRegistros">
 	<div class="carregando" id="carregando"></div>
 	<div class="carregando_centro" id="carregando_centro">
@@ -53,11 +51,38 @@
 </div>
 
 <script>
+	var selected_id = 0;
+	$('.dv_listaVeiculos').unbind('click');
+	$('#veiculos_evento .dv_listaVeiculos').live('click',function(){
+		selected_id = $(this).attr('data-id');
+		getEventos(0);
+		$("#veiculos_evento").css('display','none');
+		$('#resultados').css('display','block');
+		$('.voltar').css('display','block');
+	 });
+	 
+	 function voltar(){
+		$("#veiculos_evento").css('display','block');
+		$('#resultados').css('display','none');
+		$('.voltar').css('display','none');	 
+	 }
  	$(document).ready( function() {
+		$('.voltar').css('display','none');
         $('#lblTituloPagina').html('Eventos de Ve&iacute;culos');
 
         abrirCarregando('Carregando Veículos');
-		getVeiculosOptions();
+		$.post( _HOST+'/admin/veiculos/getListaVeiculos.php'
+			  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			  	, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+				, VERSION: _CURRENT_VERSION
+				}
+			  , function(data){
+			  		$('#veiculos_evento').html(data);
+                    fecharCarregando();
+                    
+                    getNextLocation();
+			  });
         //getPosicoes(1);
     });
 	
@@ -68,7 +93,7 @@
     function trocarVeiculo(){
     	$('.dv_listaVeiculos').remove();
     		
-    	if( $('#veiculo_id').val() != '' )
+    	if( selected_id > 0 )
     		getEventos(0);
     }
 
@@ -86,7 +111,7 @@
     }
 
     var consultando = 0;
-    function getEventos(p_inicio, p_continuacao){    	
+    function getEventos(p_inicio, p_continuacao){   
     	if(consultando == 0){
     		consultando = 1;
 
@@ -100,14 +125,14 @@
 				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
 			  	    , LOGIN:localStorage.getItem('BTRAC_LOGIN')
 				  	, SENHA:localStorage.getItem('BTRAC_SENHA')
-				  	, VEICULO_ID: $('#veiculo_id').val()
+				  	, VEICULO_ID: selected_id
 					, VERSION: _CURRENT_VERSION
 				  	, INICIO: p_inicio
 				   	, LIMIT: 30
 				  	}
 				  , function(data){
 				  		$('.carregandoScroll').remove();
-				  		$('#internal-page').append(data);
+				  		$('#resultados').html(data);
 	                    fecharCarregando();
 
 	                    consultando = 0;

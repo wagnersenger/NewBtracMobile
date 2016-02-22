@@ -3,10 +3,8 @@
 <script src="assets/js/config.js"></script>
 <script src="assets/js/common.js"></script>
 <div id="internal-page">
-	<div class="conteudoInterno">
-		<h3 class="titulo"><img src="assets/img/right.png" height="16" >Selecione um ve&iacute;culo:</h3>
-		<label class="labelInput">Placa:&nbsp;</label><select id="veiculo_id" class="field" onchange="trocarVeiculo()"></select>
-	</div>
+	<div id="veiculos_posicao"></div>
+    <div id="resultados"></div>
 	<input type="hidden" id="totalPosicoes">
 	<div class="carregando" id="carregando"></div>
 	<div class="carregando_centro" id="carregando_centro">
@@ -52,16 +50,47 @@
 	var totalEnderecosConcluidos = 0;
 	var currentIndexPosition = 0;
 	var countLocations = 0;
+	var selected_id = 0;
 	
 	 if(commomInterval){
  		clearInterval(commomInterval);
 	 }
+	 
+	 $('.dv_listaVeiculos').unbind('click');
+	 $('#veiculos_posicao > .dv_listaVeiculos').live('click',function(){
+		selected_id = $(this).attr('data-id');
+		getPosicoes(0);
+		$("#veiculos_posicao").css('display','none');
+		$('#resultados').css('display','block');
+		$('.voltar').css('display','block');
+	 });
+	 
+	 function voltar(){
+		$("#veiculos_posicao").css('display','block');
+		$('#resultados').css('display','none');
+		$('.voltar').css('display','none');	 
+	 }
 
  	$(document).ready( function() {
+		$('.voltar').css('display','none');
         $('#lblTituloPagina').html('Posi&ccedil;&otilde;es de Ve&iacute;culos');
 
+        abrirCarregando('Carregando Veículos'); 
+
         abrirCarregando('Carregando Veículos');
-		getVeiculosOptions();
+
+		$.post( _HOST+'/admin/veiculos/getListaVeiculos.php'
+			  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			  	, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+				, VERSION: _CURRENT_VERSION
+				}
+			  , function(data){
+			  		$('#veiculos_posicao').html(data);
+                    fecharCarregando();
+                    
+                    getNextLocation();
+			  });
 		
 		//getPosicoes(1);
     });
@@ -95,7 +124,7 @@
 
     var consultando = 0;
     function getPosicoes(p_inicio, p_continuacao){
-    	if( $('#veiculo_id').val() ){
+    	if( selected_id > 0 ){
 	    	if(consultando == 0){
 	    		consultando = 1;
 
@@ -110,13 +139,13 @@
 				  	    , LOGIN:localStorage.getItem('BTRAC_LOGIN')
 					  	, SENHA:localStorage.getItem('BTRAC_SENHA')
 						, VERSION: _CURRENT_VERSION
-					  	, VEICULO_ID: $('#veiculo_id').val()
+					  	, VEICULO_ID: selected_id
 					  	, INICIO: p_inicio
 					   	, LIMIT: 30
 					  	}
 					  , function(data){
 					  		$('.carregandoScroll').remove();
-					  		$('#internal-page').append(data);
+					  		$('#resultados').html(data);
 		                    fecharCarregando();
 
 		                    consultando = 0;
