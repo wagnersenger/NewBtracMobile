@@ -36,27 +36,7 @@
 	<div id="page">
 		<div class="snap-drawers">
 			<!-- MENU -->
-			<menu id="menu">
-				<div class="topcoat-list" id="menu-content">
-					<ul class="topcoat-list__container">
-						<li class="topcoat-list__item botoes-app" data-url="home.html" data-controler='HomeController' >
-							<div class="iconMenu"><img src="assets/img/marker9.png" style="vertical-align:-5px"  ></div>&nbsp;Localiza&ccedil;&atilde;o
-						</li>
-						<li class="topcoat-list__item botoes-app" data-url="veiculos.html" data-controler='VeiculosController'>
-							<div class="iconMenu"><img src="assets/img/truck3.png" style="vertical-align:-4px"  ></div>&nbsp;Ve&iacute;culos
-						</li>
-						<li class="topcoat-list__item botoes-app" data-url="posicoes.html" data-controler='PosicoesController' align="absmiddle">
-							<div class="iconMenu"><img src="assets/img/lista1.png" style="vertical-align:-4px"  ></div>&nbsp;Posi&ccedil;&otilde;es
-						</li>
-						<li class="topcoat-list__item botoes-app" data-url="eventos.html" data-controler='EventosController'>
-							<div class="iconMenu"><img src="assets/img/atention.png" style="vertical-align:-4px"  ></div>&nbsp;Eventos
-						</li>
-						<li class="topcoat-list__item botoes-app" data-url="logoff.html" data-controler='LogoffController'>
-							<div class="iconMenu"><img src="assets/img/sair.png" style="vertical-align:-4px"  ></div>&nbsp;Sair
-						</li>
-					</ul>
-				</div>
-			</menu>
+			<menu id="menu"></menu>
 		</div>
 
 		<!-- DYNAMIC CONTENT -->
@@ -66,6 +46,9 @@
 				<!-- APP IMG LOAD WITH CSS -->
 				<div id="menu-button"></div>
 				<label id="lblTituloPagina"></label>
+				<div onclick="voltar()" class="voltar">
+					<img style="margin-top: 10px;" src="http://mobile.btrac.com.br/vc/admin/assets/img/return.png" />
+				</div>
 			</header>
 			<!-- load content here -->
 			<div id="scroll" class="overthrow"></div>
@@ -81,6 +64,100 @@
 			var windowHeight = window.innerHeight;
 			$('#scroll').css('height',windowHeight);
 		}
+		$(document).ready(function(){
+			$.post(_HOST + 'admin/sistema/getMenu.php'
+				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+					, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+					, SENHA:localStorage.getItem('BTRAC_SENHA')
+					, VERSION: _CURRENT_VERSION
+				    }
+				  , function(result){
+				  
+						$('#menu').html(result)
+						if($('#menu ul > li').length == 1){ // somente o botão sair foi retornado
+							$('body').html( newhtml );
+						}
+					});
+		})
+		
+		newhtml = '<style>';
+		newhtml += '			.carregandoBranco{';
+		newhtml += '						position: absolute;';
+		newhtml += '						top: 0px;';
+		newhtml += '						width: 100%;';
+		newhtml += '						height: 100%;';
+		newhtml += '						background-color: #fff;';
+		newhtml += '						opacity: 0.8;';
+		newhtml += '						filter: alpha(opacity=40);';
+		newhtml += '						z-index: 9998;';
+		newhtml += '						display:block !important ;';
+		newhtml += '					}';
+							
+		newhtml += '					.carregandoCentroBranco{';
+		newhtml += '						position: absolute;';
+		newhtml += '						top: 30%;';
+		newhtml += '						width: 80%;';
+		newhtml += '						height: 200px;';
+		newhtml += '						margin-left:10%;';
+		newhtml += '						background-color: #fff;';
+		
+		newhtml += '						z-index: 9999;';
+		newhtml += '						border-radius: 10px;';
+		newhtml += '						color:#FFF;';
+		newhtml += '						display:block !important ;';
+		newhtml += '					}';
+							
+		newhtml += '					.carregandoCentroBranco > div{';
+		newhtml += '						text-align:center;';
+		newhtml += '						color:#036;';
+		newhtml += '						font-weight:bold;';
+		newhtml += '					}';
+							
+		newhtml += '					.carregandoCentroBranco > div > p{';
+		newhtml += '						text-align:center;';
+		newhtml += '						font-size:14px;';
+		newhtml += '						color:#069;';
+		newhtml += '						margin:20px auto auto;';
+		newhtml += '						font-weight:normal;';
+		newhtml += '					}';
+							
+		newhtml += '					.carregandoCentroBranco > div > span{';
+		newhtml += '						width:70%;';
+		newhtml += '						margin:10px auto auto;';
+		newhtml += '					}';
+							
+		newhtml += '					.carregandoCentroBranco > div > span > button{';
+		newhtml += '						width:100%;';
+		newhtml += '						height:30px;';
+		newhtml += '						font-weight:bold;';
+		newhtml += '						color:#fff;';
+		newhtml += '						background: linear-gradient(to bottom , #033, #063);';
+		newhtml += '						border:0px;';
+		newhtml += '						border-radius:5px;';
+		newhtml += '						margin-top:10px;';
+		newhtml += '					}';
+							
+		newhtml += '				</style>';
+						
+		newhtml += '				<div class="carregandoBranco" id="carregando"  style="border:1px solid; display:block !important"></div>';
+		newhtml += '				<div class="carregandoCentroBranco" id="carregando_centro" style="display:block !important" >';
+		newhtml += '					<div style="margin:auto; width:90%; margin-top:28px; margin-bottom: 10px">';
+		newhtml += '						BTRAC';
+		newhtml += '						<p>';
+		newhtml += '						O seu usuário não possui permissão de acesso ao aplicativo, por favor entre em contato com a administração do sistema.';
+		newhtml += '						</p>';
+		newhtml += '						<span>';
+		newhtml += '							<button onClick="voltaLogin()">Ok</button>';
+		newhtml += '						</span>';
+								
+		newhtml += '					</div>';
+		newhtml += '				</div>';
+		
+		function voltaLogin(){
+			localStorage.clear();
+			window.location = 'index.html';	
+		}
+		
 	</script>
 </body>
 
