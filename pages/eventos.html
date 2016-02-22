@@ -3,8 +3,18 @@
 <script src="assets/js/config.js"></script>
 <script src="assets/js/common.js"></script>
 
+<style>
+.dv_listaVeiculos{
+	padding: 5px 0px;	
+}
+</style>
+
 <div id="internal-page">
-	<div id="veiculos_evento"></div>
+	<div id="veiculos_evento">
+        <div class="dv_listaVeiculos h45" style="background: rgb(200,200,200); color: white; width: 70%;">
+            <label class="lbModelo">Selecione o Veículo:</label>
+        </div>
+    </div>
     <div id="resultados"></div>
 	<input type="hidden" id="totalRegistros">
 	<div class="carregando" id="carregando"></div>
@@ -49,12 +59,18 @@
 
 	</div>
 </div>
+<!-- modelo -->
+<div id="modelo" class="dv_listaVeiculos" style="background: rgb(200,200,200)">
+    <label class="lbModelo">Selecione o Veículo:</label>
+</div>
 
 <script>
 	var selected_id = 0;
 	$('.dv_listaVeiculos').unbind('click');
 	$('#veiculos_evento .dv_listaVeiculos').live('click',function(){
 		selected_id = $(this).attr('data-id');
+		if(!selected_id || selected_id == undefined)
+			return;
 		getEventos(0);
 		$("#veiculos_evento").css('display','none');
 		$('#resultados').css('display','block');
@@ -65,6 +81,7 @@
 		$("#veiculos_evento").css('display','block');
 		$('#resultados').css('display','none');
 		$('.voltar').css('display','none');	 
+		$('#resultados').html('');
 	 }
  	$(document).ready( function() {
 		$('.voltar').css('display','none');
@@ -78,7 +95,7 @@
 				, VERSION: _CURRENT_VERSION
 				}
 			  , function(data){
-			  		$('#veiculos_evento').html(data);
+			  		$('#veiculos_evento').append(data);
                     fecharCarregando();
                     
                     getNextLocation();
