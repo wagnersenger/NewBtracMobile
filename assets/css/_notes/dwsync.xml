@@ -18,4 +18,13 @@
 <file name="snap.css" server="192.168.146.131//var/www/html/btracmobile/" local="130439314500000000" remote="130928605080000000" />
 <file name="style.css" server="192.168.146.131//var/www/html/btracmobile/" local="130929280345067500" remote="130929290730000000" />
 <file name="topcoat-mobile-light.min.css" server="192.168.146.131//var/www/html/btracmobile/" local="130439314500000000" remote="130928605080000000" />
+<file name="common.css" server="192.168.146.134//var/www/html/btracmobile/" local="131000963655003430" remote="131003716540000000" />
+<file name="common_tst.css" server="192.168.146.134//var/www/html/btracmobile/" local="130610464898654439" remote="131003716540000000" />
+<file name="fastgap.min.css" server="192.168.146.134//var/www/html/btracmobile/" local="130439314500000000" remote="131003716540000000" />
+<file name="index.css" server="192.168.146.134//var/www/html/btracmobile/" local="130616534828472634" remote="131003716540000000" />
+<file name="localizacao.css" server="192.168.146.134//var/www/html/btracmobile/" local="130608125984867781" remote="131003716540000000" />
+<file name="login.css" server="192.168.146.134//var/www/html/btracmobile/" local="130928550663733492" remote="131003716540000000" />
+<file name="snap.css" server="192.168.146.134//var/www/html/btracmobile/" local="130439314500000000" remote="131003716540000000" />
+<file name="style.css" server="192.168.146.134//var/www/html/btracmobile/" local="131001866741175980" remote="131003716540000000" />
+<file name="topcoat-mobile-light.min.css" server="192.168.146.134//var/www/html/btracmobile/" local="130439314500000000" remote="131003716540000000" />
 </dwsync>
