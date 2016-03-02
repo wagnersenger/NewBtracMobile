@@ -139,7 +139,7 @@ and open the template in the editor.
     
 }
 
-.veiculoIconeBus, .veiculoIconeTruck, .veiculoIconeBoat, .veiculoIconeCar{
+.veiculoIconeBus, .veiculoIconeTruck, .veiculoIconeBoat, .veiculoIconeCar, .veiculoIconeTrator, .veiculoIconeVan{
 	max-height:38px;
 	max-width:50px;
 	padding:10px 0px;
@@ -160,6 +160,14 @@ and open the template in the editor.
 
 .veiculoIconeBoat{
     margin:13px 8px;
+}
+
+.veiculoIconeTrator{
+    margin:4px 8px;
+}
+
+.veiculoIconeVan{
+    margin:-2px 8px;
 }
 
 .lbModelo{

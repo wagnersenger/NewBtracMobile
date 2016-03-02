@@ -2,49 +2,65 @@
 <link href="/assets/css/localizacao.css" rel="stylesheet" />
 <script src="assets/js/config.js"></script>
 <script src="assets/js/common.js"></script>
+<style>
+.dv_listaVeiculos{
+	padding: 5px 0px;	
+}
+.windowAlertLocalizacoes{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: rgba(150,150,150,0.8);
+	z-index: 999;
+}
+</style>
 <div id="internal-page">
-	<div class="conteudoInterno">
-		<h3 class="titulo"><img src="assets/img/right.png" height="16" >Selecione um ve&iacute;culo:</h3>
-		<label class="labelInput">Placa:&nbsp;</label><select id="veiculo_id" class="field" onchange="trocarVeiculo()"></select>
-	</div>
+	<div id="veiculos_posicao">
+        <div class="dv_listaVeiculos h45" style="background: rgb(150,150,150);    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
+            <label style="color: white;" class="lbModelo">Selecione o Veículo</label>
+        </div>
+    </div>
+    <div id="resultados"></div>
 	<input type="hidden" id="totalPosicoes">
-	<div class="carregando" id="carregando"></div>
-	<div class="carregando_centro" id="carregando_centro">
-	    <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
-	    <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
-	</div>
-	<div class="mapa" id="mapa" >
-		<div id="positionMap"></div>
-		<table border="0" class="tblData" cellpadding="2" cellspacing="1">
-			<tr>
-				<td>Placa:</td>
-				<td id="td_placa" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Data:</td>
-				<td id="td_data_hora" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Cidade:</td>
-				<td id="td_cidade" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Próximo a:</td>
-				<td id="td_proximidade" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Velocidade:</td>
-				<td id="td_velocidade" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Situa&ccedil;&atilde;o:</td>
-				<td id="td_situacao" class="td_data"></td>
-			</tr>
-		</table>
-		<input type="hidden" id="posicao_exibicao" />
-		<button class="btnCinza" onClick="fecharPosicaoVeiculo()">FECHAR</button>
+</div>
+<div class="carregando" id="carregando"></div>
+<div class="carregando_centro" id="carregando_centro">
+    <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
+    <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
+</div>
+<div class="mapa" id="mapa" >
+    <div id="positionMap"></div>
+    <table border="0" class="tblData" cellpadding="2" cellspacing="1">
+        <tr>
+            <td>Placa:</td>
+            <td id="td_placa" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Data:</td>
+            <td id="td_data_hora" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Cidade:</td>
+            <td id="td_cidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Próximo a:</td>
+            <td id="td_proximidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Velocidade:</td>
+            <td id="td_velocidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Situa&ccedil;&atilde;o:</td>
+            <td id="td_situacao" class="td_data"></td>
+        </tr>
+    </table>
+    <input type="hidden" id="posicao_exibicao" />
+    <button class="btnCinza" onClick="fecharPosicaoVeiculo()">FECHAR</button>
 
-	</div>
 </div>
 <form method="post" target="exec" id="frmAddresses" name="frmAddresses"  ></form>
 <script>
@@ -52,16 +68,64 @@
 	var totalEnderecosConcluidos = 0;
 	var currentIndexPosition = 0;
 	var countLocations = 0;
+	var selected_id = 0;
+	var consultando_google = false;
 	
 	 if(commomInterval){
  		clearInterval(commomInterval);
 	 }
+	 
+	 $('.dv_listaVeiculos').unbind('click');
+	 $('#veiculos_posicao > .dv_listaVeiculos').live('click',function(){
+		selected_id = $(this).attr('data-id');
+		if(!selected_id || selected_id == undefined)
+			return;
+   		consultando = 0;
+		totalEnderecos = 0;
+		totalEnderecosConcluidos = 0;
+		currentIndexPosition = 0;
+		countLocations = 0;
+		getPosicoes(0);
+		$("#veiculos_posicao").css('display','none');
+		$('#resultados').css('display','block');
+		$('.voltar').css('display','block');
+	 });
+	 
+	 function voltar(){
+		if(consultando_google && countLocations > 0){
+			$('#internal-page').parent().parent().append('<div id="carregando_localizacoes" class="windowAlertLocalizacoes"><div  class="carregando_centro" style="display: block;"><div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img width="20px" src="assets/img/loading.gif"></div> <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Aguarde enquanto terminamos de buscar as localizações</label></div></div></div>');
+			return;
+		}
+		select_id = 0;
+   		consultando = 0;
+		totalEnderecos = 0;
+		totalEnderecosConcluidos = 0;
+		currentIndexPosition = 0;
+		countLocations = 0;
+		$("#veiculos_posicao").css('display','block');
+		$('#resultados').css('display','none');
+		$('.voltar').css('display','none');	 
+		$('#resultados').html('');
+	 }
 
  	$(document).ready( function() {
+		$('.voltar').css('display','none');
         $('#lblTituloPagina').html('Posi&ccedil;&otilde;es de Ve&iacute;culos');
 
         abrirCarregando('Carregando Veículos');
-		getVeiculosOptions();
+
+		$.post( _HOST+'/admin/veiculos/getListaVeiculos.php'
+			  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			  	, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+				, VERSION: _CURRENT_VERSION
+				}
+			  , function(data){
+			  		$('#veiculos_posicao').append(data);
+                    fecharCarregando();
+                    
+                    getNextLocation();
+			  });
 		
 		//getPosicoes(1);
     });
@@ -74,8 +138,10 @@
 		currentIndexPosition = 0;
 		countLocations = 0;
     		
-    	if( $('#veiculo_id').val() != '' )
-    		getPosicoes(0);
+    	if( $('#veiculo_id').val() != '' ){
+    		consultando = 0;
+			getPosicoes(0);
+		}
 		
     }
 
@@ -95,28 +161,31 @@
 
     var consultando = 0;
     function getPosicoes(p_inicio, p_continuacao){
-    	if( $('#veiculo_id').val() ){
+    	if( selected_id > 0 ){
 	    	if(consultando == 0){
 	    		consultando = 1;
+				consultando_google = true;
 
 	    		if(p_continuacao != 1)
 	    			abrirCarregando('Buscando Posições');
 
 	    		if(p_inicio > 0 )
-	    			$('#internal-page').append('<div class="carregandoScroll"><img src="assets/img/loading.gif" height="16px">&nbsp;Carregando...</div>');
+	    			$('#internal-page #resultados').append('<div class="carregandoScroll"><img src="assets/img/loading.gif" height="16px">&nbsp;Carregando...</div>');
 
 		    	$.post( _HOST+'/admin/veiculos/getPosicoes.php'
 					  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
 				  	    , LOGIN:localStorage.getItem('BTRAC_LOGIN')
 					  	, SENHA:localStorage.getItem('BTRAC_SENHA')
 						, VERSION: _CURRENT_VERSION
-					  	, VEICULO_ID: $('#veiculo_id').val()
+					  	, VEICULO_ID: selected_id
 					  	, INICIO: p_inicio
 					   	, LIMIT: 30
 					  	}
 					  , function(data){
 					  		$('.carregandoScroll').remove();
-					  		$('#internal-page').append(data);
+					  		$('#resultados').append(data);
+							if($('#resultados').find('.nenhumResultado').length > 0)
+								selected_id = 0;
 		                    fecharCarregando();
 
 		                    consultando = 0;
@@ -140,8 +209,8 @@
  		gMaps.addMarker(p_latitude, p_longitude);
  		gMaps.setCenter(p_latitude, p_longitude);
 
- 		//$('#mapa').css('top', document.getElementById('scroll').scrollTop );
-		//$('#carregando').css('top', document.getElementById('scroll').scrollTop );
+ 		$('#mapa').css('margin-top', $('#scroll').scrollTop()+"px" );
+ 		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );
 		//$('#carregando_centro').css('top', document.getElementById('scroll').scrollTop );
  		$('.carregando').css('height', $('#internal-page').height() );
 
@@ -158,6 +227,9 @@
  		$('#scroll').css('overflow','hidden');
     	$('#positionMap').offset({ top: $('#mapa').offset().top });
 		$('#mapa').css('top', '35px' );
+		/*
+ 		$('#mapa').css('margin-top', $('#scroll').scrollTop()+"px" );
+ 		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );*/
     }
 
     function fecharPosicaoVeiculo(){
@@ -264,6 +336,8 @@
 						totalEnderecosConcluidos++;
 						
 						if($( ".veiculo_coordenadas" ).size() == totalEnderecosConcluidos){
+							consultando_google = false;
+							$('#carregando_localizacoes').remove();
 							enviarAddresses();
 						}else{
 							waitNextLocation(200);

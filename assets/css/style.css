@@ -120,3 +120,11 @@ menu {
   height: 100%;
   border-right: 1px solid #ccc;
 }
+
+.voltar{
+	color: black;
+	position: absolute;
+	display:none;	
+	right: 25px;
+	top: 0px;
+}
