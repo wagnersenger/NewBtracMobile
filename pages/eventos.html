@@ -7,61 +7,67 @@
 .dv_listaVeiculos{
 	padding: 5px 0px;	
 }
+.windowAlertLocalizacoes{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: rgba(150,150,150,0.8);
+	z-index: 999;
+}
 </style>
 
 <div id="internal-page">
 	<div id="veiculos_evento">
-        <div class="dv_listaVeiculos h45" style="background: rgb(200,200,200); color: white; width: 70%;">
-            <label class="lbModelo">Selecione o Veículo:</label>
+        <div class="dv_listaVeiculos h45" style="background: rgb(150,150,150);    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
+            <label style="color: white;" class="lbModelo">Selecione o Veículo</label>
         </div>
     </div>
-    <div id="resultados"></div>
+    <div id="resultados_eventos"></div>
 	<input type="hidden" id="totalRegistros">
-	<div class="carregando" id="carregando"></div>
-	<div class="carregando_centro" id="carregando_centro">
-	    <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
-	    <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
-	</div>
-	<div class="mapa" id="mapa" >
-		<div id="positionMap"></div>
-		<table border="0" class="tblData" cellpadding="2" cellspacing="1">
-			<tr>
-				<td>Placa:</td>
-				<td id="td_placa" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Data:</td>
-				<td id="td_data_hora" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Evento:</td>
-				<td id="td_evento" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Cidade:</td>
-				<td id="td_cidade" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Próximo a:</td>
-				<td id="td_proximidade" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Velocidade:</td>
-				<td id="td_velocidade" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Situa&ccedil;&atilde;o:</td>
-				<td id="td_situacao" class="td_data"></td>
-			</tr>
-		</table>
-		
-		<button class="btnCinza" onClick="fecharPosicaoVeiculo()">FECHAR</button>
-
-	</div>
 </div>
-<!-- modelo -->
-<div id="modelo" class="dv_listaVeiculos" style="background: rgb(200,200,200)">
-    <label class="lbModelo">Selecione o Veículo:</label>
+
+<div style="position: fixed;" class="carregando" id="carregando"></div>
+<div class="carregando_centro" id="carregando_centro">
+    <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
+    <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
+</div>
+<div class="mapa" id="mapa" >
+    <div id="positionMap"></div>
+    <table border="0" class="tblData" cellpadding="2" cellspacing="1">
+        <tr>
+            <td>Placa:</td>
+            <td id="td_placa" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Data:</td>
+            <td id="td_data_hora" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Evento:</td>
+            <td id="td_evento" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Cidade:</td>
+            <td id="td_cidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Próximo a:</td>
+            <td id="td_proximidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Velocidade:</td>
+            <td id="td_velocidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Situa&ccedil;&atilde;o:</td>
+            <td id="td_situacao" class="td_data"></td>
+        </tr>
+    </table>
+    
+    <button class="btnCinza" onClick="fecharPosicaoVeiculo()">FECHAR</button>
+
 </div>
 
 <script>
@@ -71,17 +77,28 @@
 		selected_id = $(this).attr('data-id');
 		if(!selected_id || selected_id == undefined)
 			return;
+   		consultando = 0;
+		totalEnderecos = 0;
+		totalEnderecosConcluidos = 0;
+		currentIndexPosition = 0;
+		countLocations = 0;
 		getEventos(0);
 		$("#veiculos_evento").css('display','none');
-		$('#resultados').css('display','block');
+		$('#resultados_eventos').css('display','block');
 		$('.voltar').css('display','block');
 	 });
 	 
 	 function voltar(){
+		selected_id = 0;
+   		consultando = 0;
+		totalEnderecos = 0;
+		totalEnderecosConcluidos = 0;
+		currentIndexPosition = 0;
+		countLocations = 0;
 		$("#veiculos_evento").css('display','block');
-		$('#resultados').css('display','none');
+		$('#resultados_eventos').css('display','none');
 		$('.voltar').css('display','none');	 
-		$('#resultados').html('');
+		$('#resultados_eventos').html('');
 	 }
  	$(document).ready( function() {
 		$('.voltar').css('display','none');
@@ -128,15 +145,16 @@
     }
 
     var consultando = 0;
-    function getEventos(p_inicio, p_continuacao){   
-    	if(consultando == 0){
+    function getEventos(p_inicio, p_continuacao){ 
+	
+    	if(consultando == 0 && selected_id > 0){
     		consultando = 1;
 
     		if(p_continuacao != 1)
     			abrirCarregando('Buscando Eventos');
 
     		if(p_inicio > 0 )
-    			$('#internal-page').append('<div class="carregandoScroll"><img src="assets/img/loading.gif" height="16px">&nbsp;Carregando...</div>');
+    			$('#internal-page #resultados_eventos').append('<div class="carregandoScroll"><img src="assets/img/loading.gif" height="16px">&nbsp;Carregando...</div>');
 
 	    	$.post( _HOST+'/admin/veiculos/getEventos.php'
 				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
@@ -149,7 +167,9 @@
 				  	}
 				  , function(data){
 				  		$('.carregandoScroll').remove();
-				  		$('#resultados').html(data);
+				  		$('#resultados_eventos').append(data);
+						if($('#resultados_eventos').find('.nenhumResultado').length > 0)
+							selected_id = 0;
 	                    fecharCarregando();
 
 	                    consultando = 0;
@@ -171,8 +191,9 @@
  		gMaps.addMarker(p_latitude, p_longitude);
  		gMaps.setCenter(p_latitude, p_longitude);
 
- 		$('#mapa').css('top', document.getElementById('scroll').scrollTop );
-
+ 		$('#mapa').css('margin-top', $('#scroll').scrollTop()+"px" );
+ 		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );
+		//$('#carregando').css('top',(parseInt($(p_obj_div).attr('data-ordem')) * 71) + 60);
  		$('.carregando').css('height', $('#internal-page').height() );
 
 		

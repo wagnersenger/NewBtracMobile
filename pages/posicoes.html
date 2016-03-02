@@ -24,43 +24,43 @@
     </div>
     <div id="resultados"></div>
 	<input type="hidden" id="totalPosicoes">
-	<div class="carregando" id="carregando"></div>
-	<div class="carregando_centro" id="carregando_centro">
-	    <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
-	    <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
-	</div>
-	<div class="mapa" id="mapa" >
-		<div id="positionMap"></div>
-		<table border="0" class="tblData" cellpadding="2" cellspacing="1">
-			<tr>
-				<td>Placa:</td>
-				<td id="td_placa" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Data:</td>
-				<td id="td_data_hora" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Cidade:</td>
-				<td id="td_cidade" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Próximo a:</td>
-				<td id="td_proximidade" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Velocidade:</td>
-				<td id="td_velocidade" class="td_data"></td>
-			</tr>
-			<tr>
-				<td>Situa&ccedil;&atilde;o:</td>
-				<td id="td_situacao" class="td_data"></td>
-			</tr>
-		</table>
-		<input type="hidden" id="posicao_exibicao" />
-		<button class="btnCinza" onClick="fecharPosicaoVeiculo()">FECHAR</button>
+</div>
+<div class="carregando" id="carregando"></div>
+<div class="carregando_centro" id="carregando_centro">
+    <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
+    <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
+</div>
+<div class="mapa" id="mapa" >
+    <div id="positionMap"></div>
+    <table border="0" class="tblData" cellpadding="2" cellspacing="1">
+        <tr>
+            <td>Placa:</td>
+            <td id="td_placa" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Data:</td>
+            <td id="td_data_hora" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Cidade:</td>
+            <td id="td_cidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Próximo a:</td>
+            <td id="td_proximidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Velocidade:</td>
+            <td id="td_velocidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Situa&ccedil;&atilde;o:</td>
+            <td id="td_situacao" class="td_data"></td>
+        </tr>
+    </table>
+    <input type="hidden" id="posicao_exibicao" />
+    <button class="btnCinza" onClick="fecharPosicaoVeiculo()">FECHAR</button>
 
-	</div>
 </div>
 <form method="post" target="exec" id="frmAddresses" name="frmAddresses"  ></form>
 <script>
@@ -92,10 +92,16 @@
 	 });
 	 
 	 function voltar(){
-		if(consultando_google){
+		if(consultando_google && countLocations > 0){
 			$('#internal-page').parent().parent().append('<div id="carregando_localizacoes" class="windowAlertLocalizacoes"><div  class="carregando_centro" style="display: block;"><div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img width="20px" src="assets/img/loading.gif"></div> <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Aguarde enquanto terminamos de buscar as localizações</label></div></div></div>');
 			return;
 		}
+		select_id = 0;
+   		consultando = 0;
+		totalEnderecos = 0;
+		totalEnderecosConcluidos = 0;
+		currentIndexPosition = 0;
+		countLocations = 0;
 		$("#veiculos_posicao").css('display','block');
 		$('#resultados').css('display','none');
 		$('.voltar').css('display','none');	 
@@ -164,7 +170,7 @@
 	    			abrirCarregando('Buscando Posições');
 
 	    		if(p_inicio > 0 )
-	    			$('#internal-page').append('<div class="carregandoScroll"><img src="assets/img/loading.gif" height="16px">&nbsp;Carregando...</div>');
+	    			$('#internal-page #resultados').append('<div class="carregandoScroll"><img src="assets/img/loading.gif" height="16px">&nbsp;Carregando...</div>');
 
 		    	$.post( _HOST+'/admin/veiculos/getPosicoes.php'
 					  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
@@ -178,6 +184,8 @@
 					  , function(data){
 					  		$('.carregandoScroll').remove();
 					  		$('#resultados').append(data);
+							if($('#resultados').find('.nenhumResultado').length > 0)
+								selected_id = 0;
 		                    fecharCarregando();
 
 		                    consultando = 0;
@@ -201,8 +209,8 @@
  		gMaps.addMarker(p_latitude, p_longitude);
  		gMaps.setCenter(p_latitude, p_longitude);
 
- 		//$('#mapa').css('top', document.getElementById('scroll').scrollTop );
-		//$('#carregando').css('top', document.getElementById('scroll').scrollTop );
+ 		$('#mapa').css('margin-top', $('#scroll').scrollTop()+"px" );
+ 		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );
 		//$('#carregando_centro').css('top', document.getElementById('scroll').scrollTop );
  		$('.carregando').css('height', $('#internal-page').height() );
 
@@ -219,6 +227,9 @@
  		$('#scroll').css('overflow','hidden');
     	$('#positionMap').offset({ top: $('#mapa').offset().top });
 		$('#mapa').css('top', '35px' );
+		/*
+ 		$('#mapa').css('margin-top', $('#scroll').scrollTop()+"px" );
+ 		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );*/
     }
 
     function fecharPosicaoVeiculo(){
