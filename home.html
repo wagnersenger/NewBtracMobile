@@ -21,7 +21,9 @@
 	<!--<script src="../dist/js/fastgap.core.js"></script>-->
 	<script src="assets/js/fastgap.js"></script>
 	<script src="assets/js/vendors/zepto.min.js"></script>
-	<script src="assets/js/maps_api.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<!--<script src="assets/js/maps_api.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyABBAEz0olIUCgvbZlCSuAPwkq8brNQXd8"></script>-->
 	<script src="assets/js/maps.js"></script>
 	<script src="assets/js/config.js"></script>
 	<!--<script src="assets/js/vendors/jquery.js" type="text/javascript"></script>-->
@@ -31,7 +33,7 @@
 	<title>Btrac, rastreamento de ve&iacute;culost</title>
 </head>
 
-<body onresize="reajustarTela()"> 
+<body onresize="reajustarTela()">
 	<!-- BOX CONTENT LOAD PAGES WITH AJAX-->
 	<div id="page">
 		<div class="snap-drawers">
@@ -60,7 +62,7 @@
         </div>
 	</div>
 	<script>
-		function reajustarTela(){			
+		function reajustarTela(){
 			var windowHeight = window.innerHeight;
 			$('#scroll').css('height',windowHeight);
 		}
@@ -72,14 +74,14 @@
 					, VERSION: _CURRENT_VERSION
 				    }
 				  , function(result){
-				  
+
 						$('#menu').html(result)
 						if($('#menu ul > li').length == 1){ // somente o botão sair foi retornado
 							$('body').html( newhtml );
 						}
 					});
 		})
-		
+
 		newhtml = '<style>';
 		newhtml += '			.carregandoBranco{';
 		newhtml += '						position: absolute;';
@@ -92,7 +94,7 @@
 		newhtml += '						z-index: 9998;';
 		newhtml += '						display:block !important ;';
 		newhtml += '					}';
-							
+
 		newhtml += '					.carregandoCentroBranco{';
 		newhtml += '						position: absolute;';
 		newhtml += '						top: 30%;';
@@ -100,19 +102,19 @@
 		newhtml += '						height: 200px;';
 		newhtml += '						margin-left:10%;';
 		newhtml += '						background-color: #fff;';
-		
+
 		newhtml += '						z-index: 9999;';
 		newhtml += '						border-radius: 10px;';
 		newhtml += '						color:#FFF;';
 		newhtml += '						display:block !important ;';
 		newhtml += '					}';
-							
+
 		newhtml += '					.carregandoCentroBranco > div{';
 		newhtml += '						text-align:center;';
 		newhtml += '						color:#036;';
 		newhtml += '						font-weight:bold;';
 		newhtml += '					}';
-							
+
 		newhtml += '					.carregandoCentroBranco > div > p{';
 		newhtml += '						text-align:center;';
 		newhtml += '						font-size:14px;';
@@ -120,12 +122,12 @@
 		newhtml += '						margin:20px auto auto;';
 		newhtml += '						font-weight:normal;';
 		newhtml += '					}';
-							
+
 		newhtml += '					.carregandoCentroBranco > div > span{';
 		newhtml += '						width:70%;';
 		newhtml += '						margin:10px auto auto;';
 		newhtml += '					}';
-							
+
 		newhtml += '					.carregandoCentroBranco > div > span > button{';
 		newhtml += '						width:100%;';
 		newhtml += '						height:30px;';
@@ -136,9 +138,9 @@
 		newhtml += '						border-radius:5px;';
 		newhtml += '						margin-top:10px;';
 		newhtml += '					}';
-							
+
 		newhtml += '				</style>';
-						
+
 		newhtml += '				<div class="carregandoBranco" id="carregando"  style="border:1px solid; display:block !important"></div>';
 		newhtml += '				<div class="carregandoCentroBranco" id="carregando_centro" style="display:block !important" >';
 		newhtml += '					<div style="margin:auto; width:90%; margin-top:28px; margin-bottom: 10px">';
@@ -149,15 +151,15 @@
 		newhtml += '						<span>';
 		newhtml += '							<button onClick="voltaLogin()">Ok</button>';
 		newhtml += '						</span>';
-								
+
 		newhtml += '					</div>';
 		newhtml += '				</div>';
-		
+
 		function voltaLogin(){
 			localStorage.clear();
-			window.location = 'index.html';	
+			window.location = 'index.html';
 		}
-		
+
 	</script>
 </body>
 

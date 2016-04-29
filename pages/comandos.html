@@ -1,0 +1,549 @@
+<link href="assets/css/common.css" rel="stylesheet" />
+<link href="/assets/css/localizacao.css" rel="stylesheet" />
+<script src="assets/js/config.js"></script>
+<script src="assets/js/common.js"></script>
+
+<style>
+.dv_listaVeiculos{
+	padding: 5px 0px;	
+}
+.windowAlertLocalizacoes{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: rgba(150,150,150,0.8);
+	z-index: 999;
+}
+.confirmacao{
+	position: fixed;
+	z-index: 10;
+	top: 0px; 
+	left: 0px; 
+	right: 0px; 
+	bottom: 0px;	
+	display: none;
+	background: rgba(0,0,0,0.7);
+}
+.centralizarMsg{
+	height: 140px;
+	top: 50%;
+	margin-top: -70px;
+	position: relative;
+	background: rgb(222,222,222);
+	color: rgb(100,100,100);
+}
+.confirmacao span{
+	position: relative;
+	text-align: center;
+	top: 40%;
+	font-weight: bold;
+}
+.confirmacao .fechar{
+	position: absolute; 
+	top: 0px;
+	right: -32%;	
+}
+.confirmacao input:first-child{
+	display: inline-block;	
+	float: left;
+	margin-left: 10px;
+	padding: 8px 15px;
+	background: rgb(50,170,85);
+	color: white;
+	border-width: 0px;
+	font-size: 14px;
+	font-weight: bold;
+}
+.confirmacao input:last-child{
+	display: inline-block;	
+	float: right;
+	margin-right: 10px;
+	background: rgb(200,70,85);
+	color: white;
+	border-width: 0px;
+	padding: 8px 15px;
+	font-size: 14px;
+	font-weight: bold;
+}
+.carregandoBranco{
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	opacity: 0.8;
+	filter: alpha(opacity=40);
+	z-index: 9998;
+	display:block !important ;
+}
+.carregandoCentroBranco{
+	position: absolute;
+	top: 30%;
+	width: 80%;
+	height: 200px;
+	margin-left:10%;
+	background-color: #fff;
+	z-index: 9999;
+	border-radius: 10px;
+	color:#FFF;
+	display:block !important ;
+}
+.carregandoCentroBranco > div{
+	text-align:center;
+	color:#036;
+	font-weight:bold;
+}
+.carregandoCentroBranco > div > p{
+	text-align:center;
+	font-size:14px;
+	color:#069;
+	margin:20px auto auto;
+	font-weight:normal;
+}
+.carregandoCentroBranco > div > span{
+	width:70%;
+	margin:10px auto auto;
+}
+.carregandoCentroBranco > div > span > button{
+	width:100%;
+	height:30px;
+	font-weight:bold;
+	color:#fff;
+	background: linear-gradient(to bottom , #033, #063);
+	border:0px;
+	border-radius:5px;
+	margin-top:10px;
+}
+</style>
+
+<div id="internal-page">
+	<div id="veiculos_comando">
+        <div class="dv_listaVeiculos h45" style="background: rgb(150,150,150);    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
+            <label style="color: white;" class="lbModelo">Selecione o Veículo</label>
+        </div>
+    </div>
+    <div id="resultados_comandos"></div>
+	<input type="hidden" id="totalRegistros">
+</div>
+
+<div style="position: fixed;" class="carregando" id="carregando"></div>
+<div class="carregando_centro" id="carregando_centro">
+    <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
+    <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
+</div>
+<div class="confirmacao" id="confirmacao">
+	<div class="carregandoBranco" id="carregando"  style="border:1px solid; display:block !important"></div>
+    <div class="carregandoCentroBranco" id="carregando_centro" style="display:block !important" >
+        <div style="margin:auto; width:90%; margin-top:28px; margin-bottom: 10px">
+            <span id="placa">BTRAC</span>
+            <p>
+            	Deseja continuar e enviar o comando <span id="comando" style="display: inline;"></span> para o veículo?
+            </p>
+            <span>
+            <button onClick="confirmar()">Confirmar</button>
+            </span>
+            <span onclick="cancelar();" class="fechar">X</span>                    
+        </div>
+    </div>
+</div>
+<div class="mapa" id="mapa" >
+    <div id="positionMap"></div>
+    <table border="0" class="tblData" cellpadding="2" cellspacing="1">
+        <tr>
+            <td>Placa:</td>
+            <td id="td_placa" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Data:</td>
+            <td id="td_data_hora" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Cidade:</td>
+            <td id="td_cidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Próximo a:</td>
+            <td id="td_proximidade" class="td_data"></td>
+        </tr>
+        <tr>
+            <td>Velocidade:</td>
+            <td id="td_velocidade" class="td_data"></td>
+        </tr>
+    </table>
+    
+    <button class="btnCinza" onClick="fecharPosicaoVeiculo()">FECHAR</button>
+
+</div>
+<form method="post" target="exec" id="frmAddresses" name="frmAddresses"  ></form>
+<form method="post" target="exec" id="frmCmd" name="frmCmd"  ></form>
+
+<script>
+	var totalEnderecos = 0;
+	var totalEnderecosConcluidos = 0;
+	var currentIndexPosition = 0;
+	var countLocations = 0;
+	var selected_id = 0;
+	var consultando_google = false;
+	var v_post;
+	var last_id_comando = null;
+	
+	$('.dv_listaVeiculos').unbind('click');
+	$('#veiculos_comando .dv_listaVeiculos').live('click',function(){
+		listaComandos(this);
+	 });
+	 
+	 function listaComandos(elem){
+	 	selected_id = $(elem).attr('data-id');
+		$('#placa').html($(elem).find('.lbModelo').html());
+		if(!selected_id || selected_id == undefined)
+			return;
+   		consultando = 0;
+		totalEnderecos = 0;
+		totalEnderecosConcluidos = 0;
+		currentIndexPosition = 0;
+		countLocations = 0;
+		getTerminais(selected_id);
+		$("#veiculos_comando").css('display','none');
+		$('#resultados_comandos').css('display','block');
+		$('.voltar').css('display','block');
+		$('#veiculos_comando .dv_listaVeiculos').die('click');
+		$('#veiculos_comando .dv_listaVeiculos').live('click',function(){
+			listaComandos(this);
+		 });
+	 }
+	 function cancelar(){
+		$('#confirmacao').css('display','none');
+	 }
+	 function voltar(){
+		if(v_ajax)
+			v_ajax.abort();
+		if(v_post)
+			v_post.abort();
+		selected_id = 0;
+   		consultando = 0;
+		totalEnderecos = 0;
+		totalEnderecosConcluidos = 0;
+		currentIndexPosition = 0;
+		countLocations = 0;
+		tempo_restante = 0;
+		contador = 0;
+		tempo = 5;
+		clearInterval(interval);
+		$('.mapa').css('display','none');
+		$('#carregando').css('display','none');
+		$("#veiculos_comando").css('display','block');
+		$('#resultados_comandos').css('display','none');
+		$('.voltar').css('display','none');	 
+		$('#resultados_comandos').html('');
+	 }
+ 	$(document).ready( function() {
+		$('.voltar').css('display','none');
+        $('#lblTituloPagina').html('Comandos de Ve&iacute;culos');
+		clearInterval(interval);
+
+        abrirCarregando('Carregando Veículos');
+		$.post( _HOST+'/admin/veiculos/getListaVeiculos.php'
+			  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			  	, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+				, VERSION: _CURRENT_VERSION
+				}
+			  , function(data){
+			  		$('#veiculos_comando').append(data);
+                    fecharCarregando();
+                    
+                    getNextLocation();
+			  });
+        //getPosicoes(1);
+    });
+	
+	if(commomInterval){
+ 		clearInterval(commomInterval);
+	 }
+
+    function trocarVeiculo(){
+    	$('.dv_listaVeiculos').remove();
+    		
+    	if( selected_id > 0 )
+    		getTerminais(selected_id);
+    }
+
+    function getVeiculosOptions(){
+    	$.post(_HOST+'/admin/veiculos/getVeiculosOptions.php'
+ 			  ,{  LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+ 			  	, EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+				, VERSION: _CURRENT_VERSION }
+ 			  , function(data){
+	 			  	$('#veiculo_id').html(data);
+	 			  	fecharCarregando();
+ 			  }
+    		);
+    }
+
+    var consultando = 0;
+	var totalVazio;
+	var block = false
+    function getComandos(p_terminal_id){ 
+	
+    	if(consultando == 0 && selected_id > 0){
+    		consultando = 1;
+
+	    	$.post( _HOST+'/admin/veiculos/getComandos.php'
+				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			  	    , LOGIN:localStorage.getItem('BTRAC_LOGIN')
+				  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+				  	, VEICULO_ID: selected_id
+				  	, TERMINAL_ID: p_terminal_id
+					, VERSION: _CURRENT_VERSION
+				  	}
+				  , function(data){
+				  		$('.carregandoScroll').remove();
+				  		$('#resultados_comandos').html(data);
+						if($('#resultados_comandos').find('.nenhumResultado').length > 0)
+							selected_id = 0;
+	                    fecharCarregando();
+
+	                    consultando = 0;
+						totalVazio = $( "#resultados_comandos .dv_listaVeiculos[data-localidade=\"\"]" ).length;
+						totalEnderecosConcluidos = 0;
+						getLocations();
+				  });
+
+    	}
+    }
+	
+	function getTerminais(p_veiculo_id){
+		$.post( _HOST+'/admin/veiculos/getTerminais.php'
+			  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+				, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+				, SENHA:localStorage.getItem('BTRAC_SENHA')
+				, VEICULO_ID: p_veiculo_id
+				, VERSION: _CURRENT_VERSION
+				}
+			  , function(data){
+					$('.carregandoScroll').remove();
+					$('#resultados_comandos').html(data);
+					if($('#resultados_comandos').find('.nenhumResultado').length > 0)
+						selected_id = 0;
+					fecharCarregando();
+
+			  });
+	}
+
+    function ultimosComandos(p_terminal_id, atualizacao, offset){
+		var tempo = 5;
+		if(isNaN(offset) || offset == undefined)
+			offset = 5;
+		if(!atualizacao){
+			tempo_restante = 0;
+			contador = 0;
+			tempo = 5;
+			clearInterval(interval);
+			interval = setInterval(function(){atualiza(p_terminal_id, offset)}, 1000);
+		}else
+			tempo = tempo_restante;
+		$.post( _HOST+'/admin/veiculos/getUltimosComandos.php'
+		  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			, SENHA:localStorage.getItem('BTRAC_SENHA')
+			, TERMINAL_ID: p_terminal_id
+			, VERSION: _CURRENT_VERSION
+			, TEMPO: tempo
+			, OFFSET: offset
+			, LASTCOMANDO: last_id_comando
+			}
+		  , function(data){
+				$('.carregandoScroll').remove();
+				$('#resultados_comandos').html(data);
+				if($('#resultados_comandos').find('.nenhumResultado').length > 0)
+					selected_id = 0;
+				fecharCarregando();
+	
+		  });
+    }
+	
+	function execComando(p_comando_id, p_terminal_id, elem, p_parametro_id){
+		$("#comando").html($(elem).find('.lbModelo').html());
+		$('#frmCmd').html  ('<input type="hidden" name= "COMANDO_ID" value= "'+p_comando_id+'" />');
+		$('#frmCmd').append('<input id="terminal_id_enviando" type="hidden" name="TERMINAL_ID" value="'+p_terminal_id+'" />');
+		$('#frmCmd').append('<input id="terminal_id_enviando" type="hidden" name="PARAMETRO_ID" value="'+p_parametro_id+'" />');
+		$('#frmCmd').append('<input type="hidden" name="EMPRESA_ID" value="'+ localStorage.getItem('BTRAC_EMPRESA_ID')+'" />');
+		$('#frmCmd').append('<input type="hidden" name="SENHA" value="'+ localStorage.getItem('BTRAC_SENHA')+'" />');
+		$('#frmCmd').append('<input type="hidden" name="LOGIN" value="'+ localStorage.getItem('BTRAC_LOGIN')+'" />');
+		$('#frmCmd').append('<input type="hidden" name="VERSION" value="'+ _CURRENT_VERSION+'" />');
+		$('#frmCmd').append('<input type="hidden" name="EXECUCAO" value="7">');
+		$('#confirmacao').css('display','block');
+	}
+	
+	function confirmar(){
+		if(block)
+			return;
+		block = true;
+		$.post( _HOST+"/admin/veiculos/control.php"
+			  , $('#frmCmd').serialize()
+			  , function(r) {
+				    last_id_comando = parseInt(r);
+					$('#confirmacao').css('display','none');
+					$('#veiculos_comando').css('display','none');
+					$('#resultados_comandos').css('display','block');
+					block = false;
+					ultimosComandos($('#terminal_id_enviando').val(), false, 1);
+				});	
+	}
+
+    function fecharPosicaoVeiculo(){
+    	document.getElementById('carregando').style.display = 'none';
+    	document.getElementById('mapa').style.display = 'none';
+
+    	$('#scroll').css('overflow','auto');
+    }
+	function getLocations(){
+		var i=0;
+		$( "#resultados_comandos .dv_listaVeiculos[data-localidade=\"\"]" ).each(function() {
+			
+				displayLocation($( this ).attr('data-lat'), $( this ).attr('data-lng'), $( this ).attr('data-id'));
+				
+				return false;
+		});	
+	}
+	
+	
+	function waitNextLocation(v_time){
+		setTimeout(getLocations(), v_time);
+	}
+	
+	
+	function enviarAddresses(){
+		if( $('#frmAddresses').html() != '' ){
+			with(document.frmAddresses){						
+				$('#frmAddresses').append('<input type="hidden" name="EXECUCAO" value="6">');
+				$('#frmAddresses').append('<input type="hidden" name="LOGIN" value="'+localStorage.getItem('BTRAC_LOGIN')+'">');
+				$('#frmAddresses').append('<input type="hidden" name="SENHA" value="'+localStorage.getItem('BTRAC_SENHA')+'">');
+				$('#frmAddresses').append('<input type="hidden" name="VERSION" value="'+_CURRENT_VERSION+'">');
+
+				$.post( _HOST+"/admin/veiculos/control.php"
+					  , $('#frmAddresses').serialize()
+					  , function(r) {console.log(r)});
+			}
+		}
+		$('#frmAddresses').html('');
+	}
+	
+	Adresses = Array();
+	var withKey = false;
+	var v_ajax;
+	
+	function displayLocation(latitude,longitude, posicao_id, p_placa, p_data, p_velocidade, p_situacao, p_icon, key){
+		r = '';
+		document.getElementById('carregando').style.display = 'block';
+    	document.getElementById('mapa').style.display = 'block';
+		$('#positionMap').css('height', (parseInt($(document).height()) - 260)+ 'px')
+
+    	gMaps = new GoogleMaps();
+ 		gMaps.htmlId = 'positionMap';
+ 		gMaps.zoom = 15;
+ 		gMaps.initialize();
+ 		gMaps.markerIcon = p_icon;
+ 		gMaps.addMarker(latitude, longitude);
+ 		gMaps.setCenter(latitude, longitude);
+
+ 		$('#mapa').css('margin-top', $('#scroll').scrollTop()+"px" );
+ 		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );
+		//$('#carregando_centro').css('top', document.getElementById('scroll').scrollTop );
+ 		$('.carregando').css('height', $('#internal-page').height() );
+
+ 		document.getElementById('td_placa').innerHTML = p_placa;
+ 		document.getElementById('td_data_hora').innerHTML = p_data;
+ 		document.getElementById('td_velocidade').innerHTML = p_velocidade+' km/h';
+		
+ 		//v_obj = document.getElementById("positionMap");
+		
+ 		$('#scroll').css('overflow','hidden');
+    	$('#positionMap').offset({ top: $('#mapa').offset().top });
+		$('#mapa').css('top', '35px' );
+		if(key)
+			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'&key='+_GMAPS_ADDRESS_KEY;
+		else
+			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude;
+
+		v_ajax = $.ajax({
+		  url: url,
+		  dataType: 'json',
+		  async: true,
+		  success: function(data) {
+					if(data.status == 'OK' ){
+						var address = data.results[0].address_components;			
+						
+						for (var j=0; j<address.length; j++){
+							if (address[j].types[0]=='administrative_area_level_2'){
+								var cidade = address[j].long_name;								
+							}
+							if (address[j].types[0]=='route'){
+								var rua = address[j].long_name;
+							}
+							if (address[j].types[0]=='street_number'){
+								var numero = address[j].long_name;
+							}
+						}
+						
+						endereco = data.results[0].formatted_address;
+
+						if(!cidade){
+							for (var j=0; j<address.length; j++){
+								if (address[j].types[0]=='locality'){
+									var cidade = address[j].long_name;
+									break;
+								}
+							}
+						}
+						
+						$('#td_cidade').html(cidade);
+						$('#td_proximidade').html(endereco);
+						
+						$('#frmAddresses').append('<input type="hidden" name="POSICAO_ID[]" value="'+posicao_id+'"><input type="hidden" name="ADDRESS[]" value="'+data.results[0].formatted_address+'" ><input type="hidden" name="CITY[]" value="'+cidade+'" >');
+	
+						enviarAddresses();
+						
+					}else{
+						
+						displayLocation(latitude,longitude, posicao_id, p_placa, p_data, p_velocidade, p_situacao, p_icon, key)
+					}
+				
+				
+		  },
+		  error: function(){
+			displayLocation(latitude,longitude, posicao_id, p_placa, p_data, p_velocidade, p_situacao, p_icon, key)
+		  }
+		  
+		});
+	
+	};
+	
+	var tempo_restante = 0;
+	var contador = 0;
+	var interval;
+	function atualiza(p_terminal_id, offset){
+		if(tempo_restante == 0){
+			switch(contador){
+				case 1:
+				case 2:
+				case 3:	tempo_restante = 5; $('#atualiza span').html('5');  break;
+				case 4:	tempo_restante = 10; $('#atualiza span').html('10'); break;
+				case 5:	tempo_restante = 20; $('#atualiza span').html('20'); break;
+				case 6:	tempo_restante = 30; $('#atualiza span').html('30'); break;	
+				case 7: clearInterval(interval); tempo_restante = 'Atualizado.'; break;				
+			}
+			if(contador > 0 && contador <= 7){
+				ultimosComandos(p_terminal_id, true, offset);	
+			}
+			contador ++;
+			$('#atualiza span').html(tempo_restante);	
+		}else{
+			$('#atualiza span').html(--tempo_restante);	
+		}
+	}	
+	
+</script>
