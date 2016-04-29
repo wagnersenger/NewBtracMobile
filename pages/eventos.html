@@ -53,7 +53,7 @@
             <td id="td_cidade" class="td_data"></td>
         </tr>
         <tr>
-            <td>Próximo a:</td>
+            <td>Localização:</td>
             <td id="td_proximidade" class="td_data"></td>
         </tr>
         <tr>
@@ -69,12 +69,24 @@
     <button class="btnCinza" onClick="fecharPosicaoVeiculo()">FECHAR</button>
 
 </div>
+<form method="post" target="exec" id="frmAddresses" name="frmAddresses"  ></form>
 
 <script>
+	var totalEnderecos = 0;
+	var totalEnderecosConcluidos = 0;
+	var currentIndexPosition = 0;
+	var countLocations = 0;
 	var selected_id = 0;
+	var consultando_google = false;
+	var v_post;
+	
 	$('.dv_listaVeiculos').unbind('click');
 	$('#veiculos_evento .dv_listaVeiculos').live('click',function(){
-		selected_id = $(this).attr('data-id');
+		listaEventos(this);
+	 });
+	 
+	 function listaEventos(elem){
+	 	selected_id = $(elem).attr('data-id');
 		if(!selected_id || selected_id == undefined)
 			return;
    		consultando = 0;
@@ -86,15 +98,25 @@
 		$("#veiculos_evento").css('display','none');
 		$('#resultados_eventos').css('display','block');
 		$('.voltar').css('display','block');
-	 });
+		$('#veiculos_evento .dv_listaVeiculos').die('click');
+		$('#veiculos_evento .dv_listaVeiculos').live('click',function(){
+			listaEventos(this);
+		 });
+	 }
 	 
 	 function voltar(){
+		if(v_ajax)
+			v_ajax.abort();
+		if(v_post)
+			v_post.abort();
 		selected_id = 0;
    		consultando = 0;
 		totalEnderecos = 0;
 		totalEnderecosConcluidos = 0;
 		currentIndexPosition = 0;
 		countLocations = 0;
+		$('.mapa').css('display','none');
+		$('#carregando').css('display','none');
 		$("#veiculos_evento").css('display','block');
 		$('#resultados_eventos').css('display','none');
 		$('.voltar').css('display','none');	 
@@ -145,6 +167,7 @@
     }
 
     var consultando = 0;
+	var totalVazio;
     function getEventos(p_inicio, p_continuacao){ 
 	
     	if(consultando == 0 && selected_id > 0){
@@ -173,15 +196,18 @@
 	                    fecharCarregando();
 
 	                    consultando = 0;
-	                    getNextLocation();
+						totalVazio = $( "#resultados_eventos .dv_listaVeiculos[data-localidade=\"\"]" ).length;
+						totalEnderecosConcluidos = 0;
+						getLocations();
 				  });
 
     	}
     }
 
-    function abrirMapa(p_veiculo_id, p_icon, p_latitude, p_longitude, p_placa, p_data, p_cidade, p_proximidade, p_velocidade, p_situacao, p_evento, p_obj_div){
+    function abrirMapa(p_veiculo_id, p_icon, p_latitude, p_longitude, p_placa, p_data, p_cidade, p_proximidade, p_velocidade, p_situacao, p_evento, p_obj_div, p_referencia, p_lat_referencia, p_long_referencia, p_cerca){
     	document.getElementById('carregando').style.display = 'block';
     	document.getElementById('mapa').style.display = 'block';
+		$('#positionMap').css('height', (parseInt($(document).height()) - 260)+ 'px')
 		
     	gMaps = new GoogleMaps();
  		gMaps.htmlId = 'positionMap';
@@ -190,9 +216,36 @@
  		gMaps.markerIcon = p_icon;
  		gMaps.addMarker(p_latitude, p_longitude);
  		gMaps.setCenter(p_latitude, p_longitude);
+		if(p_referencia){
+			gMaps.markerIcon = p_referencia;
+			gMaps.addMarker(p_lat_referencia, p_long_referencia);
+			gMaps.fitBounds();
+		}else if(p_cerca){
+			var coord = new Array();
+			var menor_lat = null, menor_lng = null, maior_lat = null, maior_lng = null;
+			var _split = p_cerca.split('|');
+			for ( var i = 0 ; i < _split.length; i++){
+				var coords = _split[i].split('_');
+				gMaps.markerIcon = 'none';
+				gMaps.addMarker(coords[0], coords[1]);
+				coord.push( new google.maps.LatLng(coords[0],(coords[1])) )
+			}
+			newPolygon = new google.maps.Polygon({
+				paths: coord,
+				strokeColor: "#FF0000",
+				strokeOpacity: 0.8,
+				strokeWeight: 3,
+				fillColor: "#FF0000",
+				fillOpacity: 0.35
+			});
+			
+			newPolygon.setMap(gMaps.map);	
+			gMaps.fitBounds();
+		}
 
- 		$('#mapa').css('margin-top', $('#scroll').scrollTop()+"px" );
  		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );
+ 		$('#mapa').css('margin-top', $('#scroll').scrollTop()+'px' );
+ 		$('#mapa').css('height', ($(window).height() - 60)+'px' );
 		//$('#carregando').css('top',(parseInt($(p_obj_div).attr('data-ordem')) * 71) + 60);
  		$('.carregando').css('height', $('#internal-page').height() );
 
@@ -200,8 +253,8 @@
  		document.getElementById('td_placa').innerHTML = p_placa;
  		document.getElementById('td_data_hora').innerHTML = p_data;
  		document.getElementById('td_evento').innerHTML = p_evento;
- 		document.getElementById('td_cidade').innerHTML = p_cidade;
- 		document.getElementById('td_proximidade').innerHTML = p_proximidade;
+ 		document.getElementById('td_cidade').innerHTML = $(p_obj_div).attr('data-localidade');
+ 		document.getElementById('td_proximidade').innerHTML = $(p_obj_div).attr('data-localizacao');
  		document.getElementById('td_velocidade').innerHTML = p_velocidade+' km/h';
  		document.getElementById('td_situacao').innerHTML = p_situacao;
  		
@@ -218,4 +271,117 @@
 
     	$('#scroll').css('overflow','auto');
     }
+	function getLocations(){
+		var i=0;
+		$( "#resultados_eventos .dv_listaVeiculos[data-localidade=\"\"]" ).each(function() {
+			
+				displayLocation($( this ).attr('data-lat'), $( this ).attr('data-lng'), $( this ).attr('data-id'));
+				
+				return false;
+		});	
+	}
+	
+	
+	function waitNextLocation(v_time){
+		setTimeout(getLocations(), v_time);
+	}
+	
+	
+	function enviarAddresses(){
+		if( $('#frmAddresses').html() != '' ){
+			with(document.frmAddresses){						
+				$('#frmAddresses').append('<input type="hidden" name="EXECUCAO" value="6">');
+				$('#frmAddresses').append('<input type="hidden" name="LOGIN" value="'+localStorage.getItem('BTRAC_LOGIN')+'">');
+				$('#frmAddresses').append('<input type="hidden" name="SENHA" value="'+localStorage.getItem('BTRAC_SENHA')+'">');
+				$('#frmAddresses').append('<input type="hidden" name="VERSION" value="'+_CURRENT_VERSION+'">');
+
+				$.post( _HOST+"/admin/veiculos/control.php"
+					  , $('#frmAddresses').serialize()
+					  , function(r) {});
+			}
+		}
+		$('#frmAddresses').html('');
+	}
+	
+	Adresses = Array();
+	var withKey = false;
+	var v_ajax;
+	
+	function displayLocation(latitude,longitude, posicao_id){
+		r = '';
+		
+		if(withKey)
+			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'&key='+_GMAPS_ADDRESS_KEY;
+		else
+			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude;
+
+		v_ajax = $.ajax({
+		  url: url,
+		  dataType: 'json',
+		  async: true,
+		  success: function(data) {
+					if(data.status == 'OK' ){
+						var address = data.results[0].address_components;			
+						
+						for (var j=0; j<address.length; j++){
+							if (address[j].types[0]=='administrative_area_level_2'){
+								var cidade = address[j].long_name;								
+							}
+							if (address[j].types[0]=='route'){
+								var rua = address[j].long_name;
+							}
+							if (address[j].types[0]=='street_number'){
+								var numero = address[j].long_name;
+							}
+						}
+						
+						endereco = data.results[0].formatted_address;
+
+						if(!cidade){
+							for (var j=0; j<address.length; j++){
+								if (address[j].types[0]=='locality'){
+									var cidade = address[j].long_name;
+									break;
+								}
+							}
+						}
+						
+						$('#localidade'+posicao_id).html(cidade);
+						$('#localidade'+posicao_id).parent().attr('data-localidade',cidade);
+						$('#localizacao'+posicao_id).html(endereco);
+						$('#localizacao'+posicao_id).parent().attr('data-localizacao',endereco);
+						
+						$('#frmAddresses').append('<input type="hidden" name="POSICAO_ID[]" value="'+posicao_id+'"><input type="hidden" name="ADDRESS[]" value="'+data.results[0].formatted_address+'" ><input type="hidden" name="CITY[]" value="'+cidade+'" >');
+	
+						totalEnderecosConcluidos++;
+						console.log(totalVazio +'-'+ totalEnderecosConcluidos);
+						if(totalVazio == totalEnderecosConcluidos){
+							consultando_google = false;
+							enviarAddresses();
+						}else{
+							waitNextLocation(200);
+						}
+						
+					}else{
+						enviarAddresses();
+						if(data.status == 'OVER_QUERY_LIMIT'){
+							countLocations--;
+							withKey = true;	
+						}
+						waitNextLocation(200);
+					}
+				
+				
+		  },
+		  error: function(){
+			enviarAddresses();
+			countLocations--;
+			withKey = true;	
+			
+			waitNextLocation(200);
+		  }
+		  
+		});
+	
+	};
 </script>
