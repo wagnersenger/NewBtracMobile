@@ -1,122 +1,8 @@
 <link href="assets/css/common.css" rel="stylesheet" />
 <link href="/assets/css/localizacao.css" rel="stylesheet" />
+<link href="assets/css/comandos.css" rel="stylesheet" />
 <script src="assets/js/config.js"></script>
 <script src="assets/js/common.js"></script>
-
-<style>
-.dv_listaVeiculos{
-	padding: 5px 0px;	
-}
-.windowAlertLocalizacoes{
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	background: rgba(150,150,150,0.8);
-	z-index: 999;
-}
-.confirmacao{
-	position: fixed;
-	z-index: 10;
-	top: 0px; 
-	left: 0px; 
-	right: 0px; 
-	bottom: 0px;	
-	display: none;
-	background: rgba(0,0,0,0.7);
-}
-.centralizarMsg{
-	height: 140px;
-	top: 50%;
-	margin-top: -70px;
-	position: relative;
-	background: rgb(222,222,222);
-	color: rgb(100,100,100);
-}
-.confirmacao span{
-	position: relative;
-	text-align: center;
-	top: 40%;
-	font-weight: bold;
-}
-.confirmacao .fechar{
-	position: absolute; 
-	top: 0px;
-	right: -32%;	
-}
-.confirmacao input:first-child{
-	display: inline-block;	
-	float: left;
-	margin-left: 10px;
-	padding: 8px 15px;
-	background: rgb(50,170,85);
-	color: white;
-	border-width: 0px;
-	font-size: 14px;
-	font-weight: bold;
-}
-.confirmacao input:last-child{
-	display: inline-block;	
-	float: right;
-	margin-right: 10px;
-	background: rgb(200,70,85);
-	color: white;
-	border-width: 0px;
-	padding: 8px 15px;
-	font-size: 14px;
-	font-weight: bold;
-}
-.carregandoBranco{
-	position: absolute;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-	background-color: #fff;
-	opacity: 0.8;
-	filter: alpha(opacity=40);
-	z-index: 9998;
-	display:block !important ;
-}
-.carregandoCentroBranco{
-	position: absolute;
-	top: 30%;
-	width: 80%;
-	height: 200px;
-	margin-left:10%;
-	background-color: #fff;
-	z-index: 9999;
-	border-radius: 10px;
-	color:#FFF;
-	display:block !important ;
-}
-.carregandoCentroBranco > div{
-	text-align:center;
-	color:#036;
-	font-weight:bold;
-}
-.carregandoCentroBranco > div > p{
-	text-align:center;
-	font-size:14px;
-	color:#069;
-	margin:20px auto auto;
-	font-weight:normal;
-}
-.carregandoCentroBranco > div > span{
-	width:70%;
-	margin:10px auto auto;
-}
-.carregandoCentroBranco > div > span > button{
-	width:100%;
-	height:30px;
-	font-weight:bold;
-	color:#fff;
-	background: linear-gradient(to bottom , #033, #063);
-	border:0px;
-	border-radius:5px;
-	margin-top:10px;
-}
-</style>
 
 <div id="internal-page">
 	<div id="veiculos_comando">
@@ -124,7 +10,38 @@
             <label style="color: white;" class="lbModelo">Selecione o Veículo</label>
         </div>
     </div>
-    <div id="resultados_comandos"></div>
+
+    <div id="resultados_comandos" ></div>
+
+    <div id="comando_status" style="display: none ">
+    	<div class="dv_listaVeiculos h45" style="background: rgb(150,150,150);    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
+		    <label style="color: white;" class="lbModelo">Último comando do veículo </label>
+		</div>
+		<div class="contentComandos"  style="display: block; position: relative; min-height: auto; padding: 15px 0px;" >
+            <table border="0" class="tblData" cellpadding="2" cellspacing="1">
+                <tr>
+                    <td>Comando:</td>
+                    <td id="td_comando" class="td_data"></td>
+                </tr>
+                <tr>
+                    <td>Data:</td>
+                    <td id="td_data_hora" class="td_data"></td>
+                </tr>
+                <tr>
+                    <td>Equipamento:</td>
+                    <td id="td_equipamento" class="td_data"></td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td id="td_status_comando" class="status0" style="padding-left:5px"></td>
+                </tr>
+                <input type="hidden" id="checkStatus" value="0" />
+            </table>
+        
+        </div>
+        <span id="atualiza" style="font-size:13px; font-weight: bold">Atualiza em: <span id=>5</span> segundos</span>
+    </div>
+
 	<input type="hidden" id="totalRegistros">
 </div>
 
@@ -136,15 +53,27 @@
 <div class="confirmacao" id="confirmacao">
 	<div class="carregandoBranco" id="carregando"  style="border:1px solid; display:block !important"></div>
     <div class="carregandoCentroBranco" id="carregando_centro" style="display:block !important" >
-        <div style="margin:auto; width:90%; margin-top:28px; margin-bottom: 10px">
-            <span id="placa">BTRAC</span>
+        <div style="margin:auto; width:90%; margin-top:18px; margin-bottom: 10px">            
             <p>
-            	Deseja continuar e enviar o comando <span id="comando" style="display: inline;"></span> para o veículo?
+            	Deseja continuar e enviar o comando <span id="comando" style="display: inline;"></span> para o veículo <label id="placa" class="bold">BTRAC</label>?
+            </p>
+            <span style="width:100%; margin-left:3px">
+	            <button style="float:left; width:48%" onclick="confirmar(this)">Enviar</button>
+				<button style="float:left; width:48%; background-color:#f55 !important; margin-left:7px" onclick="cancelar()">Cancelar</button>
+            </span>               
+        </div>
+    </div>
+</div>
+<div class="confirmacao" id="delay">
+	<div class="carregandoBranco" id="carregando"  style="border:1px solid; display:block !important"></div>
+    <div class="carregandoCentroBranco" id="carregando_centro" style="display:block !important" >
+        <div style="margin:auto; width:90%; margin-top:28px; margin-bottom: 10px">
+            <p>
+            	Este comando já foi enviado para o veículo a poucos minutos. Por favor aguarde <span id="tempo" style="display: inline;"></span> até que outro comando possa ser enviado.
             </p>
             <span>
-            <button onClick="confirmar()">Confirmar</button>
-            </span>
-            <span onclick="cancelar();" class="fechar">X</span>                    
+            	<button onClick="$(this).parent().parent().parent().parent().css('display','none')">Fechar</button>
+            </span>                   
         </div>
     </div>
 </div>
@@ -207,6 +136,7 @@
 		getTerminais(selected_id);
 		$("#veiculos_comando").css('display','none');
 		$('#resultados_comandos').css('display','block');
+		$('#comando_status').css('display','none');
 		$('.voltar').css('display','block');
 		$('#veiculos_comando .dv_listaVeiculos').die('click');
 		$('#veiculos_comando .dv_listaVeiculos').live('click',function(){
@@ -235,6 +165,7 @@
 		$('#carregando').css('display','none');
 		$("#veiculos_comando").css('display','block');
 		$('#resultados_comandos').css('display','none');
+		$('#comando_status').css('display','none');
 		$('.voltar').css('display','none');	 
 		$('#resultados_comandos').html('');
 	 }
@@ -338,11 +269,9 @@
 		if(isNaN(offset) || offset == undefined)
 			offset = 5;
 		if(!atualizacao){
-			tempo_restante = 0;
+			tempo_restante = 5;
 			contador = 0;
 			tempo = 5;
-			clearInterval(interval);
-			interval = setInterval(function(){atualiza(p_terminal_id, offset)}, 1000);
 		}else
 			tempo = tempo_restante;
 		$.post( _HOST+'/admin/veiculos/getUltimosComandos.php'
@@ -361,15 +290,109 @@
 				if($('#resultados_comandos').find('.nenhumResultado').length > 0)
 					selected_id = 0;
 				fecharCarregando();
+				if(!atualizacao && ($('#checkStatus').val() == 0 || $('#checkStatus').val() == 1 || $('#checkStatus').val() == 8)){
+					clearInterval(interval);					
+					interval = setInterval(function(){atualiza(p_terminal_id, offset)}, 1000);
+
+				}else if($('#checkStatus').val() != 0 && $('#checkStatus').val() != 1 && $('#checkStatus').val() != 8){
+					$('#atualiza').html('Atualizado');
+				}
 	
 		  });
     }
+
+
+    function atualizaUltimoComando(){
+
+		$.post( _HOST+'/admin/veiculos/getComandoStatus.php'
+		  , { LASTCOMANDO: last_id_comando
+		  	, EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			, SENHA:localStorage.getItem('BTRAC_SENHA')
+			, VERSION: _CURRENT_VERSION }
+		  , function( result ){
+		  		data = JSON.parse( result );
+				$('.carregandoScroll').remove();
+				$('#resultados_comandos').html('');
+
+				document.getElementById('td_status_comando').className = 'status'+data[0].status_id;
+				document.getElementById('td_comando').innerHTML = data[0].comando;
+				document.getElementById('td_placa').innerHTML = data[0].placa;
+				document.getElementById('td_data_hora').innerHTML = data[0].data;
+				document.getElementById('td_equipamento').innerHTML = data[0].terminal;
+				document.getElementById('td_status_comando').innerHTML = data[0].status;
+
+				fecharCarregando();
+				
+				if( [0,1,8].indexOf( data[0].status_id ) >= 0 ){
+					startContagemAtualizacao();
+				}else{
+					$('#atualiza').html('Atualizado');
+				}
 	
-	function execComando(p_comando_id, p_terminal_id, elem, p_parametro_id){
+		  });
+    }
+
+    var intervalAtualizacao;
+    var tempo_restante = 5;
+	var contador = 0;
+	var interval;
+
+    function startContagemAtualizacao(){
+    	contador++;
+
+    	switch(contador){
+			case 1:
+			case 2:
+			case 3:	tempo_restante =  5; $('#atualiza span').html('5');  break;
+			case 4:	tempo_restante = 10; $('#atualiza span').html('10'); break;
+			case 5:	tempo_restante = 20; $('#atualiza span').html('20'); break;
+			case 6:	tempo_restante = 30; $('#atualiza span').html('30'); break;
+		}
+
+		$('#atualiza').html( 'Atualiza em: <span id=>'+tempo_restante+'</span> segundos</span>' );
+    	intervalAtualizacao = setInterval(contagemAtualizacaoComando, 1000);
+    }
+
+    function contagemAtualizacaoComando(){
+		if(tempo_restante == 1){
+			clearInterval(intervalAtualizacao);
+			$('#atualiza').html( 'Atualizando...' );
+			
+			atualizaUltimoComando();
+		}else{
+			$('#atualiza span').html( --tempo_restante );
+
+		}
+	}
+
+
+
+	function msgDelay(elem){
+		var tempo = parseInt($(elem).attr('data-timeout'));
+		tempo = Math.ceil(tempo / 60);
+		if(tempo == 1)
+			$('#tempo').html(tempo+' minuto');
+		else
+			$('#tempo').html(tempo+' minutos');
+		$('#delay').css('display','block');	
+	}
+	
+	function checkTimeout(order){
+		var aux = parseInt($('div[data-order="'+order+'"]').attr('data-timeout'));
+		console.log(aux);
+		if(aux > 0){
+			$('div[data-order="'+order+'"]').attr('data-timeout', aux - 1);
+			setTimeout(function(){checkTimeout(order);}, 1000);
+		}
+	}
+	
+	function execComando(p_comando_id, p_terminal_id, elem, p_parametro_id, p_parametro_value){
 		$("#comando").html($(elem).find('.lbModelo').html());
 		$('#frmCmd').html  ('<input type="hidden" name= "COMANDO_ID" value= "'+p_comando_id+'" />');
 		$('#frmCmd').append('<input id="terminal_id_enviando" type="hidden" name="TERMINAL_ID" value="'+p_terminal_id+'" />');
 		$('#frmCmd').append('<input id="terminal_id_enviando" type="hidden" name="PARAMETRO_ID" value="'+p_parametro_id+'" />');
+		$('#frmCmd').append('<input id="parametro_value" type="hidden" name="PARAMETRO_VALUE" value="'+p_parametro_value+'" />');
 		$('#frmCmd').append('<input type="hidden" name="EMPRESA_ID" value="'+ localStorage.getItem('BTRAC_EMPRESA_ID')+'" />');
 		$('#frmCmd').append('<input type="hidden" name="SENHA" value="'+ localStorage.getItem('BTRAC_SENHA')+'" />');
 		$('#frmCmd').append('<input type="hidden" name="LOGIN" value="'+ localStorage.getItem('BTRAC_LOGIN')+'" />');
@@ -377,8 +400,13 @@
 		$('#frmCmd').append('<input type="hidden" name="EXECUCAO" value="7">');
 		$('#confirmacao').css('display','block');
 	}
-	
-	function confirmar(){
+
+	function confirmar(elem){
+		document.getElementById('resultados_comandos').style.display = 'none';
+		document.getElementById('comando_status').style.display = '';
+		document.getElementById('td_status_comando').innerHTML = 'Registrando Comando';
+
+		$(elem).attr('disabled','disabled');
 		if(block)
 			return;
 		block = true;
@@ -388,9 +416,11 @@
 				    last_id_comando = parseInt(r);
 					$('#confirmacao').css('display','none');
 					$('#veiculos_comando').css('display','none');
-					$('#resultados_comandos').css('display','block');
+					
 					block = false;
-					ultimosComandos($('#terminal_id_enviando').val(), false, 1);
+					$(elem).removeAttr('disabled');
+
+					atualizaUltimoComando();
 				});	
 	}
 
@@ -451,6 +481,7 @@
  		gMaps.setCenter(latitude, longitude);
 
  		$('#mapa').css('margin-top', $('#scroll').scrollTop()+"px" );
+ 		$('#mapa').css('height', ($(window).height() - 113)+'px' );
  		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );
 		//$('#carregando_centro').css('top', document.getElementById('scroll').scrollTop );
  		$('.carregando').css('height', $('#internal-page').height() );
@@ -501,7 +532,7 @@
 						}
 						
 						$('#td_cidade').html(cidade);
-						$('#td_proximidade').html(endereco);
+						$('#td_proximidade').html('<span>'+endereco+'</span>');
 						
 						$('#frmAddresses').append('<input type="hidden" name="POSICAO_ID[]" value="'+posicao_id+'"><input type="hidden" name="ADDRESS[]" value="'+data.results[0].formatted_address+'" ><input type="hidden" name="CITY[]" value="'+cidade+'" >');
 	
@@ -522,28 +553,38 @@
 	
 	};
 	
-	var tempo_restante = 0;
-	var contador = 0;
-	var interval;
+	
 	function atualiza(p_terminal_id, offset){
-		if(tempo_restante == 0){
-			switch(contador){
-				case 1:
-				case 2:
-				case 3:	tempo_restante = 5; $('#atualiza span').html('5');  break;
-				case 4:	tempo_restante = 10; $('#atualiza span').html('10'); break;
-				case 5:	tempo_restante = 20; $('#atualiza span').html('20'); break;
-				case 6:	tempo_restante = 30; $('#atualiza span').html('30'); break;	
-				case 7: clearInterval(interval); tempo_restante = 'Atualizado.'; break;				
+		if(tempo_restante == 0){	
+			if($('#checkStatus').val() == 0 || $('#checkStatus').val() == 1 || $('#checkStatus').val() == 8){
+				switch(contador){
+					case 1:
+					case 2:
+					case 3:	tempo_restante =  5; $('#atualiza span').html('5');  break;
+					case 4:	tempo_restante = 10; $('#atualiza span').html('10'); break;
+					case 5:	tempo_restante = 20; $('#atualiza span').html('20'); break;
+					case 6:	tempo_restante = 30; $('#atualiza span').html('30'); break;	
+					case 7: clearInterval(interval); tempo_restante = 'Atualizado'; break;				
+				}
+				if(contador > 0 && contador <= 7){
+					ultimosComandos(p_terminal_id, true, offset);
+				}
+				contador ++;
+				$('#atualiza span').html(tempo_restante);
+			}else{
+				clearInterval(interval); 
+				tempo_restante = 'Atualizado';
 			}
-			if(contador > 0 && contador <= 7){
-				ultimosComandos(p_terminal_id, true, offset);	
-			}
-			contador ++;
-			$('#atualiza span').html(tempo_restante);	
 		}else{
-			$('#atualiza span').html(--tempo_restante);	
+			if(tempo_restante == 1){
+				$('#atualiza').html('Atualizando');
+				tempo_restante--;
+			}else
+				$('#atualiza span').html(--tempo_restante);	
 		}
-	}	
+	}
+
+
+
 	
 </script>

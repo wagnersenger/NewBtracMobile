@@ -16,12 +16,32 @@
 	background: rgba(150,150,150,0.8);
 	z-index: 999;
 }
+#td_proximidade span{ 
+	display: block; 
+	max-height: 53px; 
+	overflow: hidden; 
+}
+.dataHora{
+	margin-top: 7px !important;	
+}
+.lbCidade{
+	height: auto !important;
+	margin-top: 2px;
+	width: 83%;
+}
+.lbModelo{
+	max-height: 15px;
+	overflow: hidden;
+}
+.veiculoIconeTrator{
+	margin-top: 0px !important;	
+}
 </style>
 
 <div id="internal-page">
 	<div id="veiculos_evento">
         <div class="dv_listaVeiculos h45" style="background: rgb(150,150,150);    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
-            <label style="color: white;" class="lbModelo">Selecione o Veículo</label>
+            <label style="color: white; height: 20px;" class="lbModelo">Selecione o Veículo</label>
         </div>
     </div>
     <div id="resultados_eventos"></div>
@@ -33,7 +53,7 @@
     <div style="margin:auto; width:20px; margin-top:28px; margin-bottom: 10px"><img src="assets/img/loading.gif" width="20px"></div>
     <div style="margin:auto; font-size: 14px; text-align: center"><label id="carregando_item">Carregando</label></div>
 </div>
-<div class="mapa" id="mapa" >
+<div class="mapa" id="mapa" style="height: 100%" >
     <div id="positionMap"></div>
     <table border="0" class="tblData" cellpadding="2" cellspacing="1">
         <tr>
@@ -245,7 +265,7 @@
 
  		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );
  		$('#mapa').css('margin-top', $('#scroll').scrollTop()+'px' );
- 		$('#mapa').css('height', ($(window).height() - 60)+'px' );
+ 		//$('#mapa').css('height', ($(window).height() - 113)+'px' );
 		//$('#carregando').css('top',(parseInt($(p_obj_div).attr('data-ordem')) * 71) + 60);
  		$('.carregando').css('height', $('#internal-page').height() );
 
@@ -254,7 +274,7 @@
  		document.getElementById('td_data_hora').innerHTML = p_data;
  		document.getElementById('td_evento').innerHTML = p_evento;
  		document.getElementById('td_cidade').innerHTML = $(p_obj_div).attr('data-localidade');
- 		document.getElementById('td_proximidade').innerHTML = $(p_obj_div).attr('data-localizacao');
+ 		document.getElementById('td_proximidade').innerHTML = '<span>'+$(p_obj_div).attr('data-localizacao')+'</span>';
  		document.getElementById('td_velocidade').innerHTML = p_velocidade+' km/h';
  		document.getElementById('td_situacao').innerHTML = p_situacao;
  		

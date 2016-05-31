@@ -25,37 +25,28 @@
 	var center = true;
 
  	$(document).ready( function() {
-		try{
-			$('.voltar').css('display','none');
-
-			$('#lblTituloPagina').html('Localiza&ccedil;&atilde;o de Ve&iacute;culos');
-
-			consultarPosicoes();
-
-			gMaps = new GoogleMaps();
-			gMaps.htmlId = 'map';
-
-			gMaps.initialize();
-
-			gMaps.map.addListener('zoom_changed', function(){
-				if(loaded)
-					center = false;
-			});
-
-			gMaps.map.addListener('idle', function(){
-				loaded = true;
-			});
-
-			gMaps.map.addListener('drag', function(){
-				if(loaded)
-					center = false;
-			});
-
-		}catch(e){
-			alert( e.message );
-		}
+		$('.voltar').css('display','none');
+		
+        $('#lblTituloPagina').html('Localiza&ccedil;&atilde;o de Ve&iacute;culos');
+        
+        consultarPosicoes();
+			  
+		gMaps = new GoogleMaps();
+ 		gMaps.htmlId = 'map';
+ 		gMaps.initialize();
+		gMaps.map.addListener('zoom_changed', function(){
+			if(loaded)
+				center = false;
+		});
+		gMaps.map.addListener('idle', function(){
+			loaded = true;
+		});
+		gMaps.map.addListener('drag', function(){
+			if(loaded)
+				center = false;
+		});
     });
-
+	
 	function consultarPosicoes(){
 		abrirCarregando('Carregando Veículos');
 		loaded = false;
@@ -69,18 +60,18 @@
 				  , function(data){
 					  	$('.dv_listaVeiculos').remove();
 				  		$('#internal-page').append(data);
-
+	        
 	                    fecharCarregando();
 	                    currentMarkerLocation=0;
 	                    getNextLocation();
-
+						
 						commomInterval = setTimeout(consultarPosicoes, 30000);
 				  });
 		}catch(e){}
 
 	}
 
-
+    
 
     function getNextLocation(){
         if(currentMarkerLocation < v_markers.length){
@@ -94,21 +85,21 @@
     var withKey = false;
 	function displayLocation(latitude,longitude, posicao_id, veiculo_id){
 		r = '';
-
+		
 		if(withKey)
 			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+_GMAPS_ADDRESS_KEY;
 		else
 			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude;
-
+		
 		$.ajax({
 		  url: url,
 		  dataType: 'json',
 		  async: true,
 		  success: function(data) {
-
+				
 					if(data.status == 'OK' ){
 						var address = data.results[0].address_components;
-
+						
 						for (var j=0; j<address.length; j++){
 							if (address[j].types[0]=='administrative_area_level_2'){
 								var cidade = address[j].long_name;
@@ -134,9 +125,9 @@
 								, VERSION: _CURRENT_VERSION
 							    }
 							   , function(r) {});
-
+						
 						waitNextLocation(200);
-
+						
 					}else{
 						if(data.status == 'OVER_QUERY_LIMIT'){
 							currentLocation--;
@@ -144,20 +135,20 @@
 						}
 						waitNextLocation(200);
 					}
-
+				
 		  }
-
+		  
 		});
 	};
-
-
+	
+	
 	function getLocations(){
 		i=0;
 		$( ".veiculo_coordenadas" ).each(function() {
 			i++;
 			if(i > countLocations){
 				countLocations++;
-
+				
 				displayLocation($( this ).attr('lat'), $( this ).attr('long'), $( this ).attr('posicao_id'), $( this ).attr('veiculo_id'));
 				return false;
 			}
@@ -165,22 +156,22 @@
 		if(center)
 			gMaps.fitBounds();
 	}
-
-
-
+	
+	
+	
 	function waitNextLocation(v_time){
 		setTimeout(getLocations, v_time);
 	}
-
-
+	
+	
 	function manipMarcadorVeiculo(p_placa, p_latitude, p_longitude, p_icone){
 		encontrado = false;
 		for(i=0; i<v_markers.length; i++){
 			if(v_markers[i].placa == p_placa){
-				encontrado = true;
-
+				encontrado = true;	
+				
 				_marker = v_markers[i].marker;
-
+				
 				_marker.setAnimation(null);
 
 				v_markers[i].marker.icon = p_icone;
@@ -191,22 +182,22 @@
 				i = v_markers.length;
 			}
 		}
-
+		
 		if(!encontrado){
 			gMaps.markerIcon = p_icone;
 
 			v_marker = gMaps.addMarker(p_latitude,p_longitude,p_placa);
 
-			v_markers.push({marker:v_marker, placa:p_placa,  latitude:p_latitude, longitude:p_longitude, icon:p_icone });
+			v_markers.push({marker:v_marker, placa:p_placa,  latitude:p_latitude, longitude:p_longitude, icon:p_icone });			
 		}
-
+		
 		try{
 			clearInterval(animacao);
 		}catch(e){}
-
+		
 		animacao = setTimeout(recolocarAnimacao,1000);
 	}
-
+	
 	function recolocarAnimacao(){
 		for(i=0; i<v_markers.length; i++){
 			if(v_markers[i].placa == placaAnimacao){
@@ -216,22 +207,22 @@
 			}
 		}
 	}
-
-
-
+	
+	
+	
 	function centerMarker(p_placa){
 		for(i=0; i<v_markers.length; i++){
-
+			
 			if(v_markers[i].placa == p_placa){
 				try{
 					infoWindow.close();
 				}catch(e){}
-
+				
 				infoWindow = new google.maps.InfoWindow({
 					content: p_placa
 				});
 				infoWindow.open(gMaps.map, v_markers[i].marker);
-
+				
 				placaAnimacao = p_placa;
 				v_markers[i].marker.setAnimation(google.maps.Animation.BOUNCE);
 				gMaps.setZoom(16);

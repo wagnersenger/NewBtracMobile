@@ -118,9 +118,9 @@ and open the template in the editor.
 }
 
 .dv_listaVeiculos{
-    height: 60px;
     width: 100%;
-    background-image: url('../img/background/bg_veiculos.jpg');
+    background-color:#fefefe; 
+    border-bottom:1px solid #ccc;
     background-repeat: repeat-x;
     margin-top:1px;
     margin-left:0px;
@@ -163,15 +163,15 @@ and open the template in the editor.
 }
 
 .veiculoIconeTrator{
-    margin:4px 8px;
+    margin:-9px 8px;
 }
 
 .veiculoIconeVan{
-    margin:-2px 8px;
+    margin:-9px 8px;
 }
 
 .veiculoIconePickup{
-    margin:5px 8px;
+    margin:-1px 8px;
 }
 
 .lbModelo{
@@ -190,6 +190,26 @@ and open the template in the editor.
     font-weight: bold;
     display: block;
     margin-top:3px;
+	height: 37px;
+	overflow: hidden;
+}
+
+.lbSituacao{
+    width: 85%;
+    color:#236a9e;
+    font-size: 75%;
+    font-weight: bold;
+    display: block;
+    margin-top:3px;
+	height: 13px;
+	overflow: hidden;
+}
+
+.ligado{
+	color: 	#00a400;
+}
+.desligado{
+	color: rgb(200,0,0)	
 }
 
 #scroll{
@@ -365,7 +385,7 @@ span{
     text-align: center;
     line-height: 60px;
     font-size: 13px;
-    font-weight: bold;
+    font-weight: bold; 
     color:#333;
 }
 
