@@ -89,9 +89,10 @@ body {
 header#header-app {
   height: 60px;
   text-align: center;
+  background: #0085CA;
 /*  background: #ab0207 url('/assets/img/fastgap_logo.jpg') no-repeat center;
-*/  background: url('../img/background/bg_topo.jpg') center;
-        background-repeat: repeat-x;
+  background: url('../img/background/bg_topo.jpg') center;
+        background-repeat: repeat-x;*/
 }
 /* BOX LOAD PAGES */
 
@@ -111,7 +112,8 @@ header#header-app {
   text-align: center;
   line-height: 37px;
   background: #345365;
-  background: url('../img/back.png') no-repeat center;
+  background: url('../img/back2.png') no-repeat center;
+  background-size:30px;
 }
 /* MENU APP */
 

@@ -6,7 +6,7 @@
 
 <div id="internal-page">
 	<div id="veiculos_comando">
-        <div class="dv_listaVeiculos h45" style="background: rgb(150,150,150);    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
+        <div class="dv_listaVeiculos h45" style="background: #276F93;    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
             <label style="color: white;" class="lbModelo">Selecione o Veículo</label>
         </div>
     </div>
@@ -14,7 +14,7 @@
     <div id="resultados_comandos" ></div>
 
     <div id="comando_status" style="display: none ">
-    	<div class="dv_listaVeiculos h45" style="background: rgb(150,150,150);    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
+    	<div class="dv_listaVeiculos h45" style="background: #276F93;    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
 		    <label style="color: white;" class="lbModelo">Último comando do veículo </label>
 		</div>
 		<div class="contentComandos"  style="display: block; position: relative; min-height: auto; padding: 15px 0px;" >
@@ -39,7 +39,7 @@
             </table>
         
         </div>
-        <span id="atualiza" style="font-size:13px; font-weight: bold">Atualiza em: <span id=>5</span> segundos</span>
+        <span id="atualiza" style="font-size:13px; font-weight: bold; background: #276F93">Atualiza em: <span id=>5</span> segundos</span>
     </div>
 
 	<input type="hidden" id="totalRegistros">
@@ -58,7 +58,7 @@
             	Deseja continuar e enviar o comando <span id="comando" style="display: inline;"></span> para o veículo <label id="placa" class="bold">BTRAC</label>?
             </p>
             <span style="width:100%; margin-left:3px">
-	            <button style="float:left; width:48%" onclick="confirmar(this)">Enviar</button>
+	            <button style="float:left; width:48%" onclick="confirmarComando(this)">Enviar</button>
 				<button style="float:left; width:48%; background-color:#f55 !important; margin-left:7px" onclick="cancelar()">Cancelar</button>
             </span>               
         </div>
@@ -77,6 +77,20 @@
         </div>
     </div>
 </div>
+<div class="confirmacao" id="bloquear">
+	<div class="carregandoBranco" id="carregando"  style="border:1px solid; display:block !important"></div>
+    <div class="carregandoCentroBranco" id="carregando_centro" style="display:block !important; height: 215px" >
+        <div style="margin:auto; width:90%; margin-top:28px; margin-bottom: 10px">
+            <p>
+            	O veículo <span id="placa" style="display: inline;"></span> está com velocidade de <span id="velocidade" style="display: inline;">1</span>km/h, bloquear o veículo em movimento pode causar acidentes. Deseja prosseguir mesmo assim?
+            </p>
+            <span>
+				<button onClick="confirmar(this)" style="width:48%;">Confirmar</button>
+				<button onClick="$(this).parent().parent().parent().parent().css('display','none')" style="width:48%; background-color:#f55 !important">Cancelar</button>
+            </span>                   
+        </div>
+    </div>
+</div>
 <div class="mapa" id="mapa" >
     <div id="positionMap"></div>
     <table border="0" class="tblData" cellpadding="2" cellspacing="1">
@@ -86,7 +100,7 @@
         </tr>
         <tr>
             <td>Data:</td>
-            <td id="td_data_hora" class="td_data"></td>
+            <td id="td_data_posicao" class="td_data"></td>
         </tr>
         <tr>
             <td>Cidade:</td>
@@ -266,14 +280,17 @@
 
     function ultimosComandos(p_terminal_id, atualizacao, offset){
 		var tempo = 5;
+		
 		if(isNaN(offset) || offset == undefined)
 			offset = 5;
+			
 		if(!atualizacao){
 			tempo_restante = 5;
 			contador = 0;
 			tempo = 5;
 		}else
 			tempo = tempo_restante;
+			
 		$.post( _HOST+'/admin/veiculos/getUltimosComandos.php'
 		  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
 			, LOGIN:localStorage.getItem('BTRAC_LOGIN')
@@ -349,12 +366,21 @@
 			case 5:	tempo_restante = 20; $('#atualiza span').html('20'); break;
 			case 6:	tempo_restante = 30; $('#atualiza span').html('30'); break;
 		}
-
-		$('#atualiza').html( 'Atualiza em: <span id=>'+tempo_restante+'</span> segundos</span>' );
-    	intervalAtualizacao = setInterval(contagemAtualizacaoComando, 1000);
+		
+		if(contador < 7){
+			console.log('tempo: '+tempo_restante);
+			$('#atualiza').html( 'Atualiza em: <span id=>'+tempo_restante+'</span> segundos</span>' );
+			intervalAtualizacao = setInterval(contagemAtualizacaoComando, 1000);
+		}else{
+			$('#atualiza').html( 'Sem comunicação com o rastreador.' );
+			v_cmd_status = document.getElementById('td_status_comando');
+			v_cmd_status.innerHTML = 'Comando Pendente';
+			v_cmd_status.className = 'status4'
+		}
     }
 
     function contagemAtualizacaoComando(){
+		console.log('tempo: '+tempo_restante);
 		if(tempo_restante == 1){
 			clearInterval(intervalAtualizacao);
 			$('#atualiza').html( 'Atualizando...' );
@@ -387,7 +413,10 @@
 		}
 	}
 	
-	function execComando(p_comando_id, p_terminal_id, elem, p_parametro_id, p_parametro_value){
+	function execComando(p_comando_id, p_terminal_id, elem, p_parametro_id, p_parametro_value, p_placa){
+		$('#confirmacao').css('display','none');
+		$('#comando_status').css('display','none');
+		$('#confirmacao').css('display','block');
 		$("#comando").html($(elem).find('.lbModelo').html());
 		$('#frmCmd').html  ('<input type="hidden" name= "COMANDO_ID" value= "'+p_comando_id+'" />');
 		$('#frmCmd').append('<input id="terminal_id_enviando" type="hidden" name="TERMINAL_ID" value="'+p_terminal_id+'" />');
@@ -398,23 +427,39 @@
 		$('#frmCmd').append('<input type="hidden" name="LOGIN" value="'+ localStorage.getItem('BTRAC_LOGIN')+'" />');
 		$('#frmCmd').append('<input type="hidden" name="VERSION" value="'+ _CURRENT_VERSION+'" />');
 		$('#frmCmd').append('<input type="hidden" name="EXECUCAO" value="7">');
-		$('#confirmacao').css('display','block');
+		document.getElementById('COMANDO_ID').value = p_comando_id;
+	}
+
+	function confirmarComando( v_obj ){
+		$('#comando_status').css('display','none');
+		
+		v_input_vel = document.getElementById('VELOCIDADE');
+		if(v_input_vel.value > 0 && document.getElementById('COMANDO_ID').value == '186'){
+			$('#bloquear #velocidade').html( v_input_vel.value );
+			$('#bloquear #placa').html( document.getElementById('PLACA').value );
+			$('#confirmacao').css('display','none');
+			$('#bloquear').css('display', 'block');
+		}else
+			confirmar( v_obj );
 	}
 
 	function confirmar(elem){
 		document.getElementById('resultados_comandos').style.display = 'none';
 		document.getElementById('comando_status').style.display = '';
 		document.getElementById('td_status_comando').innerHTML = 'Registrando Comando';
-
+		
 		$(elem).attr('disabled','disabled');
+		
 		if(block)
 			return;
+			
 		block = true;
 		$.post( _HOST+"/admin/veiculos/control.php"
 			  , $('#frmCmd').serialize()
 			  , function(r) {
 				    last_id_comando = parseInt(r);
 					$('#confirmacao').css('display','none');
+					$('#bloquear').css('display','none');
 					$('#veiculos_comando').css('display','none');
 					
 					block = false;
@@ -423,6 +468,8 @@
 					atualizaUltimoComando();
 				});	
 	}
+	
+	
 
     function fecharPosicaoVeiculo(){
     	document.getElementById('carregando').style.display = 'none';
@@ -476,6 +523,7 @@
  		gMaps.htmlId = 'positionMap';
  		gMaps.zoom = 15;
  		gMaps.initialize();
+
  		gMaps.markerIcon = p_icon;
  		gMaps.addMarker(latitude, longitude);
  		gMaps.setCenter(latitude, longitude);
@@ -487,7 +535,7 @@
  		$('.carregando').css('height', $('#internal-page').height() );
 
  		document.getElementById('td_placa').innerHTML = p_placa;
- 		document.getElementById('td_data_hora').innerHTML = p_data;
+ 		document.getElementById('td_data_posicao').innerHTML = p_data;
  		document.getElementById('td_velocidade').innerHTML = p_velocidade+' km/h';
 		
  		//v_obj = document.getElementById("positionMap");

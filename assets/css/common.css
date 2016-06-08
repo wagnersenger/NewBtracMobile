@@ -48,9 +48,10 @@ and open the template in the editor.
 
 #lblTituloPagina{
     color:#fff !important;
-    font-size:20px;
-    line-height: 65px; 
+    font-size:18px;
+    line-height: 60px; 
 }
+
 
 .footer{
     width:100%;
@@ -92,6 +93,7 @@ and open the template in the editor.
 
 #menu ul li{
     color:#226599 !important;
+	font-size:95%;
 }
 
 .iconMenu{
@@ -218,7 +220,7 @@ and open the template in the editor.
 }
 
 .overthrow-enabled #scroll{
-    background: #c9c9c9 !important;
+    background: #f9f9f9 !important;
 }
 
 .conteudoInterno{
@@ -240,11 +242,7 @@ and open the template in the editor.
     font-size: 15px;
 }
 
-#lblTituloPagina{
-    color:#fff !important;
-    font-size:20px;
-    line-height: 65px; 
-}
+
 
 .labelInput{
     margin-left: 30px;
@@ -358,7 +356,7 @@ select #veiculo_id{
 
 .btnCinza{
     border:none;
-    background-color: #888;    
+    background-color: #276F93;    
     margin-bottom: 10px;
     width: 100%;
     height: 30px;
