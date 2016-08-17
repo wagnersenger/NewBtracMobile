@@ -1,0 +1,190 @@
+#td_proximidade span{ 
+	display: block; 
+	max-height: 53px; 
+	overflow: hidden; 
+}
+.dv_listaVeiculos{
+	padding: 5px 0px;	
+}
+.windowAlertLocalizacoes{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background: rgba(150,150,150,0.8);
+	z-index: 999;
+}
+.confirmacao{
+	position: fixed;
+	z-index: 10;
+	top: 0px; 
+	left: 0px; 
+	right: 0px; 
+	bottom: 0px;	
+	display: none;
+	background: rgba(0,0,0,0.7);
+}
+.centralizarMsg{
+	height: 140px;
+	top: 50%;
+	margin-top: -70px;
+	position: relative;
+	background: rgb(222,222,222);
+	color: rgb(100,100,100);
+}
+.confirmacao span{
+	position: relative;
+	text-align: center;
+	top: 40%;
+	font-weight: bold;
+}
+.confirmacao .fechar{
+	position: absolute; 
+	top: 0px;
+	right: -32%;	
+}
+.confirmacao input:first-child{
+	display: inline-block;	
+	float: left;
+	margin-left: 10px;
+	padding: 8px 15px;
+	background: rgb(50,170,85);
+	color: white;
+	border-width: 0px;
+	font-size: 14px;
+	font-weight: bold;
+}
+.confirmacao input:last-child{
+	display: inline-block;	
+	float: right;
+	margin-right: 10px;
+	background: rgb(200,70,85);
+	color: white;
+	border-width: 0px;
+	padding: 8px 15px;
+	font-size: 14px;
+	font-weight: bold;
+}
+.carregandoBranco{
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	opacity: 0.8;
+	filter: alpha(opacity=40);
+	z-index: 9998;
+	display:block !important ;
+}
+.carregandoCentroBranco{
+	position: absolute;
+	top: 30%;
+	width: 80%;
+	height: 180px;
+	margin-left:10%;
+	background-color: #fff;
+	z-index: 9999;
+	color:#FFF;
+	display:block !important ;
+}
+.carregandoCentroBranco > div{
+	text-align:center;
+	color:#036;
+	font-weight:bold;
+}
+.carregandoCentroBranco > div > p{
+	text-align:justify;
+	font-size:14px;
+	color:#069;
+	margin:20px auto auto;
+	line-height: 22px;
+	font-weight:normal;
+}
+.carregandoCentroBranco > div > span{
+	width:70%;
+	margin:10px auto auto;
+}
+.carregandoCentroBranco > div > span > button{
+	width:100%;
+	height:30px;
+	font-weight:bold;
+	color:#fff;
+	background-color:#018E4A;
+	border:0px;	
+	margin-top:10px;
+}
+.veiculoIconeTrator{
+	margin-top: 0px !important;	
+}
+#atualiza{
+	background: rgb(150, 150, 150) none repeat scroll 0 0;
+    color: white;
+    display: block;
+    text-align: center;	
+	padding: 4px 0px;
+}
+#atualiza span{
+	display: inline;
+	color: white;	
+	font-weight: bold;
+}
+.pl5 {
+    padding-left: 5px;
+}
+
+.bold{
+	font-weight: bold;
+}
+
+.status0{
+	background-color: #FFF !important;
+	color:#333;
+}
+.status1{
+	background-color: #0090D9 !important;
+	color:#fff;
+}
+.status2{
+	background-color: #FF6B6B !important;
+	color:#fff;
+}
+.status3{
+	background-color: #FF6B6B !important;
+	color:#fff;
+}
+.status4{
+	background-color: #CCCCCC !important;
+	color:#fff;
+}
+.status5{
+	background-color: #0AA699 !important;
+	color:#fff;
+}
+.status6{
+	background-color: #FF6B6B !important;
+	color:#fff;
+}
+.status7{
+	background-color: #3E739D !important;
+	color:#fff;
+}
+.status8{
+	background-color: #FFA200 !important;
+	color:#fff;
+}
+
+.contentComandos {
+    background-color: #fff;
+    border-radius: 0 !important;
+    bottom: 0;
+    color: #fff;
+    display: none;
+    margin-left: 0;
+    margin-top: 0;
+    min-height: 350px;
+    position: absolute;
+    top: 0 !important;
+    width: 100%;
+    z-index: 9999;
+}

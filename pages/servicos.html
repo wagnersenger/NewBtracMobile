@@ -1,0 +1,73 @@
+<link href="assets/css/common.css" rel="stylesheet" />
+<link href="/assets/css/localizacao.css" rel="stylesheet" />
+<script src="assets/js/config.js"></script>
+<script src="assets/js/common.js"></script>
+
+<div id="internal-page" class="divServicos"></div>
+
+<script>
+	if(commomInterval)
+		clearInterval(commomInterval);
+	
+ 	$(document).ready( function() {
+		carregarServicos();
+    });
+	
+	function carregarServicos(){
+		$('.voltar').css('display','none');
+        $('#lblTituloPagina').html('Lista de Serviços');
+
+        abrirCarregando('Carregando Serviços');
+
+		$.post( _HOST+'/admin/sistema/getServicos.php'
+			  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			  	, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+				, VERSION: _CURRENT_VERSION
+				}
+			  , function(data){
+			  		$('.divServicos').append(data);
+                    fecharCarregando();
+			  });
+	}
+	
+	function atualizarServicos(){
+		abrirCarregando('Atualizando Serviços');
+
+		$.post( _HOST+'/admin/sistema/getServicosDados.php'
+			  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+			  	, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
+				, VERSION: _CURRENT_VERSION
+				}
+			  , function(data){
+				  	v_data = JSON.parse( data );
+			  		document.getElementById('email_status').className = v_data.email.class;
+					document.getElementById('email_status').innerHTML = v_data.email.texto_status;
+					document.getElementById('email_quantidade').className = v_data.email.class;
+					document.getElementById('email_quantidade').innerHTML = v_data.email.quantidade + " E-mail(s)";
+					
+					document.getElementById('sms_status').className = v_data.sms.class;
+					document.getElementById('sms_status').innerHTML = v_data.sms.texto_status;
+					document.getElementById('sms_quantidade').className = v_data.sms.class;
+					document.getElementById('sms_quantidade').innerHTML = v_data.sms.quantidade + " SMS";
+					
+					document.getElementById('endereco_status').className = v_data.endereco.class;
+					document.getElementById('endereco_status').innerHTML = v_data.endereco.texto_status;
+					document.getElementById('endereco_quantidade').className = v_data.endereco.class;
+					document.getElementById('endereco_quantidade').innerHTML = v_data.endereco.quantidade + " Endere&ccedil;o(s)";
+					
+					document.getElementById('endereco_status_sec').className = v_data.endereco_sec.class;
+					document.getElementById('endereco_status_sec').innerHTML = v_data.endereco_sec.texto_status;
+					document.getElementById('endereco_quantidade_sec').className = v_data.endereco_sec.class;
+					document.getElementById('endereco_quantidade_sec').innerHTML = v_data.endereco_sec.quantidade + " Endere&ccedil;o(s)";
+
+					document.getElementById('posicoes_status').className = v_data.posicoes.class;
+					document.getElementById('posicoes_status').innerHTML = v_data.posicoes.texto_status;
+					document.getElementById('posicoes_quantidade').className = v_data.posicoes.class;
+					document.getElementById('posicoes_quantidade').innerHTML = v_data.posicoes.quantidade + " Arquivo(s) XML";
+                    fecharCarregando();
+			  });
+	}
+	
+</script>

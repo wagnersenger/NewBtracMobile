@@ -6,6 +6,11 @@
 .dv_listaVeiculos{
 	padding: 5px 0px;	
 }
+#td_proximidade span{ 
+	display: block; 
+	max-height: 53px; 
+	overflow: hidden; 
+}
 .windowAlertLocalizacoes{
 	position: absolute;
 	top: 0px;
@@ -15,10 +20,16 @@
 	background: rgba(150,150,150,0.8);
 	z-index: 999;
 }
+.veiculoIconeBus, .veiculoIconeTruck, .veiculoIconeBoat, .veiculoIconeCar, .veiculoIconeTrator, .veiculoIconeVan, .veiculoIconePickup{
+	padding: 5px 0px !important;	
+}
+.veiculoIconeTrator{
+	margin-top: 0px !important;	
+}
 </style>
 <div id="internal-page">
 	<div id="veiculos_posicao">
-        <div class="dv_listaVeiculos h45" style="background: rgb(150,150,150);    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
+        <div class="dv_listaVeiculos h45" style="background: #276F93;    height: 15px;    line-height: 0;    padding: 5px;    text-align: center;">
             <label style="color: white;" class="lbModelo">Selecione o Veículo</label>
         </div>
     </div>
@@ -131,6 +142,7 @@
 			  	, LOGIN:localStorage.getItem('BTRAC_LOGIN')
 			  	, SENHA:localStorage.getItem('BTRAC_SENHA')
 				, VERSION: _CURRENT_VERSION
+				, LISTACOMPLETA: 'true'
 				}
 			  , function(data){
 			  		$('#veiculos_posicao').append(data);
@@ -230,7 +242,7 @@
  		document.getElementById('td_placa').innerHTML = p_placa;
  		document.getElementById('td_data_hora').innerHTML = p_data;
  		document.getElementById('td_cidade').innerHTML = document.getElementById('cidade'+p_posicao_id).innerHTML;
- 		document.getElementById('td_proximidade').innerHTML = document.getElementById('localizacao'+p_posicao_id).innerHTML;
+ 		document.getElementById('td_proximidade').innerHTML = '<span>'+document.getElementById('localizacao'+p_posicao_id).innerHTML+'</span>';
  		document.getElementById('td_velocidade').innerHTML = p_velocidade+' km/h';
  		document.getElementById('td_situacao').innerHTML = p_situacao;
 		document.getElementById('posicao_exibicao').value = p_posicao_id;
@@ -240,7 +252,7 @@
  		$('#scroll').css('overflow','hidden');
     	$('#positionMap').offset({ top: $('#mapa').offset().top });
 		$('#mapa').css('top', '35px' );
- 		$('#mapa').css('height', ($(window).height() - 60)+'px' );
+ 		$('#mapa').css('height', ($(window).height() - 113)+'px' );
 		/*
  		$('#mapa').css('margin-top', $('#scroll').scrollTop()+"px" );
  		$('#carregando').css('margin-top', $('#scroll').scrollTop()+'px' );*/
@@ -301,10 +313,12 @@
 	function displayLocation(latitude,longitude, posicao_id){
 		r = '';
 		
-		if(withKey)
+		/*if(withKey)
 			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+_GMAPS_ADDRESS_KEY;
 		else
-			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude;
+			var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude;*/
+			
+		var url = 'http://sistema.btrac.com.br/admin/enderecos/buscador_app.php?latlng='+latitude+','+longitude;
 
 		v_ajax = $.ajax({
 		  url: url,
@@ -343,7 +357,7 @@
 						
 						if( document.getElementById('posicao_exibicao').value == posicao_id){
 							document.getElementById('td_cidade').innerHTML = cidade;
-							document.getElementById('td_proximidade').innerHTML = endereco;
+							document.getElementById('td_proximidade').innerHTML = '<span>'+endereco+'</span>';
 						}
 						
 						$('#frmAddresses').append('<input type="hidden" name="POSICAO_ID[]" value="'+posicao_id+'"><input type="hidden" name="ADDRESS[]" value="'+data.results[0].formatted_address+'" ><input type="hidden" name="CITY[]" value="'+cidade+'" >');
