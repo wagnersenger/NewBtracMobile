@@ -65,7 +65,6 @@
 			$('#scroll').css('height',windowHeight);
 		}
 		$(document).ready(function(){
-			alert(window.location.href);
 			$.post(_HOST + 'admin/sistema/getMenu.php'
 				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
 					, LOGIN:localStorage.getItem('BTRAC_LOGIN')
