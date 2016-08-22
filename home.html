@@ -69,7 +69,6 @@
 				document.getElementById('header-app').style.paddingTop = '15px';
 				document.getElementById('menu-button').style.top = '20px';
 				document.getElementById('divVoltar').style.top = '20px';
-				//$('#menu').addClass('menu_top');
 			}
 			$.post(_HOST + 'admin/sistema/getMenu.php'
 				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
@@ -82,9 +81,6 @@
 						$('#menu').html(result)
 						if($('#menu ul > li').length == 1){ // somente o botão sair foi retornado
 							$('body').html( newhtml );
-						}
-						if( window.location.href.indexOf("android_asset") == -1){
-							//$('#menu ul > li:first-child').css("padding-top","42px");
 						}
 					});
 		})
