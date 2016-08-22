@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="Icon-120.png" server="192.168.146.128//var/www/html/btracmobile/" local="130825671528842797" remote="130882697960000000" />
-<file name="Icon-72.png" server="192.168.146.128//var/www/html/btracmobile/" local="130825671348712495" remote="130882697960000000" />
-<file name="Icon-76.png" server="192.168.146.128//var/www/html/btracmobile/" local="130825671405855763" remote="130882697960000000" />
-<file name="Icon-76@2x.png" server="192.168.146.128//var/www/html/btracmobile/" local="130825671473609638" remote="130882697960000000" />
-<file name="Icon.png" server="192.168.146.128//var/www/html/btracmobile/" local="130825639257576987" remote="130882697960000000" />
-<file name="Icon-120.jpg" server="192.168.146.131//var/www/html/btracmobile/" local="130825013195177760" remote="130928605140000000" />
-<file name="Icon-120.png" server="192.168.146.131//var/www/html/btracmobile/" local="130825671528842797" remote="130928605140000000" />
-<file name="Icon-72.jpg" server="192.168.146.131//var/www/html/btracmobile/" local="130825015006191344" remote="130928605140000000" />
-<file name="Icon-72.png" server="192.168.146.131//var/www/html/btracmobile/" local="130825671348712495" remote="130928605140000000" />
-<file name="Icon-76.jpg" server="192.168.146.131//var/www/html/btracmobile/" local="130825014628519742" remote="130928605140000000" />
-<file name="Icon-76.png" server="192.168.146.131//var/www/html/btracmobile/" local="130825671405855763" remote="130928605140000000" />
-<file name="Icon-76@2x.jpg" server="192.168.146.131//var/www/html/btracmobile/" local="130825011234055590" remote="130928605140000000" />
-<file name="Icon-76@2x.png" server="192.168.146.131//var/www/html/btracmobile/" local="130825671473609638" remote="130928605140000000" />
-<file name="Icon.jpg" server="192.168.146.131//var/www/html/btracmobile/" local="130825023271074068" remote="130928605140000000" />
-<file name="Icon.png" server="192.168.146.131//var/www/html/btracmobile/" local="130825639257576987" remote="130928605140000000" />
+<file name="Icon-120.jpg" server="192.168.32.131//var/www/html/btracmobile/" local="131075288037070784" remote="131075288030000000" Dst="1" />
+<file name="Icon-120.png" server="192.168.32.131//var/www/html/btracmobile/" local="131075288037350784" remote="131075288030000000" Dst="1" />
+<file name="Icon-72.jpg" server="192.168.32.131//var/www/html/btracmobile/" local="131075288037660779" remote="131075288030000000" Dst="1" />
+<file name="Icon-72.png" server="192.168.32.131//var/www/html/btracmobile/" local="131075288036830731" remote="131075288030000000" Dst="1" />
+<file name="Icon-76.jpg" server="192.168.32.131//var/www/html/btracmobile/" local="131075288036900755" remote="131075288030000000" Dst="1" />
+<file name="Icon-76.png" server="192.168.32.131//var/www/html/btracmobile/" local="131075288036960736" remote="131075288030000000" Dst="1" />
+<file name="Icon-76@2x.jpg" server="192.168.32.131//var/www/html/btracmobile/" local="131075288037500768" remote="131075288030000000" Dst="1" />
+<file name="Icon-76@2x.png" server="192.168.32.131//var/www/html/btracmobile/" local="131075288036770746" remote="131075288030000000" Dst="1" />
+<file name="Icon.jpg" server="192.168.32.131//var/www/html/btracmobile/" local="131075288037230775" remote="131075288030000000" Dst="1" />
+<file name="Icon.png" server="192.168.32.131//var/www/html/btracmobile/" local="131075288037590790" remote="131075288030000000" Dst="1" />
 </dwsync>

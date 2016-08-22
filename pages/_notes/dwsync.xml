@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="home.html" server="192.168.146.139//var/www/html/btracmobile/" local="130815439993114587" remote="130815439960000000" />
-<file name="home.html" server="192.168.146.128//var/www/html/btracmobile/" local="130899889744545949" remote="130899890980000000" />
-<file name="eventos.html" server="192.168.146.128//var/www/html/btracmobile/" local="130898361101601328" remote="130898362230000000" />
-<file name="posicoes.html" server="192.168.146.128//var/www/html/btracmobile/" local="130899890263499227" remote="130899891380000000" />
-<file name="veiculos.html" server="192.168.146.128//var/www/html/btracmobile/" local="130879362470650805" remote="130897510030000000" />
-<file name="home2.html" server="192.168.146.128//var/www/html/btracmobile/" local="130439350500000000" remote="130882697960000000" />
-<file name="home_bkp.html" server="192.168.146.128//var/www/html/btracmobile/" local="130610428936397515" remote="130882697960000000" />
-<file name="logoff.html" server="192.168.146.128//var/www/html/btracmobile/" local="130709862351451550" remote="130882697960000000" />
-<file name="page4.html" server="192.168.146.128//var/www/html/btracmobile/" local="130439314500000000" remote="130882697960000000" />
-<file name="page5.html" server="192.168.146.128//var/www/html/btracmobile/" local="130439314500000000" remote="130882697960000000" />
-<file name="eventos.html" server="192.168.146.131//var/www/html/btracmobile/" local="130898361101601328" remote="130928605140000000" />
-<file name="home.html" server="192.168.146.131//var/www/html/btracmobile/" local="130930965959783610" remote="130930967690000000" />
-<file name="home2.html" server="192.168.146.131//var/www/html/btracmobile/" local="130439350500000000" remote="130928605140000000" />
-<file name="home_bkp.html" server="192.168.146.131//var/www/html/btracmobile/" local="130610428936397515" remote="130928605140000000" />
-<file name="logoff.html" server="192.168.146.131//var/www/html/btracmobile/" local="130709862351451550" remote="130928605140000000" />
-<file name="page4.html" server="192.168.146.131//var/www/html/btracmobile/" local="130439314500000000" remote="130928605140000000" />
-<file name="page5.html" server="192.168.146.131//var/www/html/btracmobile/" local="130439314500000000" remote="130928605140000000" />
-<file name="posicoes.html" server="192.168.146.131//var/www/html/btracmobile/" local="130930326060495823" remote="130930327030000000" />
-<file name="veiculos.html" server="192.168.146.131//var/www/html/btracmobile/" local="130879362470650805" remote="130928605140000000" />
+<file name="servicos.html" server="192.168.32.129//var/www/html/btracmobile/" local="131139411100936342" remote="131139411060000000" Dst="1" />
+<file name="posicoes.html" server="192.168.32.131//var/www/html/btracmobile/" local="131160825614313862" remote="131160825480000000" Dst="1" />
+<file name="home.html" server="192.168.32.131//var/www/html/btracmobile/" local="131158512459940090" remote="131158512360000000" Dst="1" />
+<file name="comandos.html" server="192.168.32.131//var/www/html/btracmobile/" local="131098696533504153" remote="131098696530000000" Dst="1" />
+<file name="eventos.html" server="192.168.32.131//var/www/html/btracmobile/" local="131097941475709018" remote="131097941470000000" Dst="1" />
+<file name="home2.html" server="192.168.32.131//var/www/html/btracmobile/" local="131075287852070131" remote="131075287850000000" Dst="1" />
+<file name="home_bkp.html" server="192.168.32.131//var/www/html/btracmobile/" local="131075287851630062" remote="131075287850000000" Dst="1" />
+<file name="logoff.html" server="192.168.32.131//var/www/html/btracmobile/" local="131075287850800000" remote="131075287850000000" Dst="1" />
+<file name="page4.html" server="192.168.32.131//var/www/html/btracmobile/" local="131075287850870000" remote="131075287850000000" Dst="1" />
+<file name="page5.html" server="192.168.32.131//var/www/html/btracmobile/" local="131075287850970017" remote="131075287850000000" Dst="1" />
+<file name="servicos.html" server="192.168.32.131//var/www/html/btracmobile/" local="131159140983834706" remote="131159140960000000" Dst="1" />
+<file name="veiculos.html" server="192.168.32.131//var/www/html/btracmobile/" local="131075287852000062" remote="131075287850000000" Dst="1" />
 </dwsync>
