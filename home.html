@@ -20,7 +20,7 @@
 	<!--<script src="../dist/js/fastgap.libs.js"></script>-->
 	<!--<script src="../dist/js/fastgap.core.js"></script>-->
 	<script src="assets/js/fastgap.js"></script>	
-	<script src="http://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<script src="http://maps.googleapis.com/maps/api/js?v=3.exp&client=gme-bsoft"></script>
 	<script src="assets/js/vendors/zepto.min.js"></script>
 	<script src="assets/js/maps.js"></script>
 	<script src="assets/js/config.js"></script>
@@ -29,6 +29,9 @@
 	<!-- VIEWPORT -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title>Btrac, rastreamento de ve&iacute;culost</title>
+    <style>
+		
+	</style>
 </head>
 
 <body onresize="reajustarTela()">
@@ -46,7 +49,7 @@
 				<!-- APP IMG LOAD WITH CSS -->
 				<div id="menu-button"></div>
 				<label id="lblTituloPagina"></label>
-				<div onclick="voltar()" class="voltar">
+				<div onclick="voltar()" class="voltar" id="divVoltar">
 					<img style="margin-top: 13px; width:25px;" src="assets/img/back3.png" />
 				</div>
 			</header>
@@ -65,14 +68,20 @@
 			$('#scroll').css('height',windowHeight);
 		}
 		$(document).ready(function(){
+			//verificar se o OS é android
+			if( window.location.href.indexOf("android_asset") == -1){
+				document.getElementById('header-app').style.paddingTop = '15px';
+				document.getElementById('menu-button').style.top = '20px';
+				document.getElementById('divVoltar').style.top = '20px';
+				$('#menu').addClass('menu_top');
+			}
 			$.post(_HOST + 'admin/sistema/getMenu.php'
 				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
 					, LOGIN:localStorage.getItem('BTRAC_LOGIN')
 					, SENHA:localStorage.getItem('BTRAC_SENHA')
 					, VERSION: _CURRENT_VERSION
-				    }
+					}
 				  , function(result){
-
 						$('#menu').html(result)
 						if($('#menu ul > li').length == 1){ // somente o botão sair foi retornado
 							$('body').html( newhtml );
