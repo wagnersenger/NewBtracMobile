@@ -49,11 +49,7 @@
 				<!-- APP IMG LOAD WITH CSS -->
 				<div id="menu-button"></div>
 				<label id="lblTituloPagina"></label>
-<<<<<<< HEAD
 				<div onclick="voltar()" class="voltar" id="divVoltar">
-=======
-				<div onclick="voltar()" class="voltar"  id="divVoltar">
->>>>>>> origin/master
 					<img style="margin-top: 13px; width:25px;" src="assets/img/back3.png" />
 				</div>
 			</header>
@@ -72,18 +68,12 @@
 			$('#scroll').css('height',windowHeight);
 		}
 		$(document).ready(function(){
-<<<<<<< HEAD
 			//verificar se o OS é android
-=======
->>>>>>> origin/master
 			if( window.location.href.indexOf("android_asset") == -1){
 				document.getElementById('header-app').style.paddingTop = '15px';
 				document.getElementById('menu-button').style.top = '20px';
 				document.getElementById('divVoltar').style.top = '20px';
-<<<<<<< HEAD
 				$('#menu').addClass('menu_top');
-=======
->>>>>>> origin/master
 			}
 			$.post(_HOST + 'admin/sistema/getMenu.php'
 				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
@@ -92,19 +82,11 @@
 					, VERSION: _CURRENT_VERSION
 					}
 				  , function(result){
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 						$('#menu').html(result)
 						if($('#menu ul > li').length == 1){ // somente o botão sair foi retornado
 							$('body').html( newhtml );
 						}
 					});
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 		})
 
 		newhtml = '<style>';
