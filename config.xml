@@ -36,5 +36,5 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <plugin name="SplashScreen" value="CDVSplashScreen" />
+    <preference name="SplashScreenDelay" value="0"/>
 </widget>
