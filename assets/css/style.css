@@ -130,3 +130,7 @@ menu {
 	right: 25px;
 	top: 0px;
 }
+
+.menu_top div ul li:first-child{
+	padding-top:42px;	
+}
