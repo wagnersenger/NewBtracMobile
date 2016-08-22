@@ -65,24 +65,28 @@
 			$('#scroll').css('height',windowHeight);
 		}
 		$(document).ready(function(){
-			if( window.location.href.indexOf("android_asset") == -1){
-				document.getElementById('header-app').style.paddingTop = '15px';
-				document.getElementById('menu-button').style.top = '20px';
-				document.getElementById('divVoltar').style.top = '20px';
-			}
-			$.post(_HOST + 'admin/sistema/getMenu.php'
-				  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
-					, LOGIN:localStorage.getItem('BTRAC_LOGIN')
-					, SENHA:localStorage.getItem('BTRAC_SENHA')
-					, VERSION: _CURRENT_VERSION
-				    }
-				  , function(result){
-
-						$('#menu').html(result)
-						if($('#menu ul > li').length == 1){ // somente o botão sair foi retornado
-							$('body').html( newhtml );
+			try{
+				if( window.location.href.indexOf("android_asset") == -1){
+					document.getElementById('header-app').style.paddingTop = '15px';
+					document.getElementById('menu-button').style.top = '20px';
+					document.getElementById('divVoltar').style.top = '20px';
+				}
+				$.post(_HOST + 'admin/sistema/getMenu.php'
+					  , { EMPRESA_ID: localStorage.getItem('BTRAC_EMPRESA_ID')
+						, LOGIN:localStorage.getItem('BTRAC_LOGIN')
+						, SENHA:localStorage.getItem('BTRAC_SENHA')
+						, VERSION: _CURRENT_VERSION
 						}
-					});
+					  , function(result){
+	
+							$('#menu').html(result)
+							if($('#menu ul > li').length == 1){ // somente o botão sair foi retornado
+								$('body').html( newhtml );
+							}
+						});
+			}catch(e){
+				alert(e.message);	
+			}
 		})
 
 		newhtml = '<style>';
